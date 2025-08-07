@@ -1,0 +1,93 @@
+.navbar {
+  background-color: #1a1a1a;
+  padding: 15px 0;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.nav-brand h2 {
+  margin: 0;
+  color: white;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.nav-center {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex: 1;
+  justify-content: center;
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-input {
+  width: 300px;
+  padding: 10px 15px;
+  background-color: #3a3a3a;
+  border: 1px solid #555;
+  border-radius: 5px;
+  color: white;
+  font-size: 14px;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #aaa;
+}
+
+.search-input:focus {
+  border-color: #4a90e2;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px;
+}
+
+.nav-link {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-link.active {
+  color: #ff6b6b;
+  border-bottom: 2px solid #ff6b6b;
+  padding-bottom: 2px;
+}
+
+.nav-link:hover {
+  color: white;
+}
+
+.signin-btn {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.signin-btn:hover {
+  background-color: #357abd;
+}
+
+.signin-btn.active {
+  background-color: #357abd;
+}
