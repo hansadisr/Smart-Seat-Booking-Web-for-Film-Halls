@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PaymentModal from './PaymentModal';
 import '../styles/PurchaseSummary.css';
 
 const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
@@ -9,6 +10,7 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
     email: '',
     agreeToTerms: false
   });
+  const [showPayment, setShowPayment] = useState(false);
 
   if (!isOpen) return null;
 
@@ -27,7 +29,7 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
       return;
     }
     console.log('Proceeding with booking:', { ...bookingData, userDetails: formData });
-    // Handle booking submission here
+    setShowPayment(true);
   };
 
   const calculateSubtotal = () => {
@@ -149,6 +151,12 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
             Proceed
           </button>
         </form>
+
+        <PaymentModal 
+          isOpen={showPayment}
+          onClose={() => setShowPayment(false)}
+          totalAmount={totalAmount.toFixed(2)}
+        />
       </div>
     </div>
   );
