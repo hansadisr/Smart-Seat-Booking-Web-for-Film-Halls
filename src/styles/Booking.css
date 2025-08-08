@@ -1,0 +1,404 @@
+.booking-page {
+  background-color: #fff;
+}
+
+.booking-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.film-cover-section {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+.film-cover-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.6);
+}
+
+.film-cover-overlay1 {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  transform: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 15px;
+  text-align: left;
+}
+
+.film-poster1 {
+  width: 100px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.4);
+}
+
+.movie-info {
+  color: white;
+}
+
+.movie-title1 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.movie-subtitle {
+  font-size: 13px;
+  margin: 5px 0;
+}
+
+.movie-tags {
+  display: flex;
+  gap: 6px;
+}
+
+.tag {
+  background-color: rgba(255,255,255,0.2);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 10px;
+  border: solid 1px white;
+}
+
+.movie-date {
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.date-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #333;
+}
+
+.date-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.date-text {
+  font-size: 16px;
+  font-weight: bold;
+  color: #6F6C6C;
+}
+
+.showtimes {
+  display: flex;
+  gap: 50px;
+  margin-bottom: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.showtime-btn {
+  background-color: #e8e8e8;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 12px;
+  width: 80px;
+  height: 70px;
+}
+
+.showtime-btn .time {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.showtime-btn .session {
+  color: #E57777;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.showtime-btn.selected {
+  background-color: #D49696;
+  color: white;
+}
+
+.showtime-btn.selected .session {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.showtime-btn:hover:not(.booked) {
+  transform: translateY(-2px);
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 20px 0 15px 0;
+  color: #6F6C6C;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+}
+
+.row-label {
+  width: 100px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #6F6C6C;
+  text-align: center;
+}
+
+.seats-group {
+  display: flex;
+  gap: 15px;
+}
+
+.seats-gap {
+  width: 100px;
+}
+
+.seat {
+  width: 32px;
+  height: 28px;
+  border: 1px solid #6F6C6C;
+  background-color: white;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: #7D7A7A;
+}
+
+.seat.empty {
+  border: 1px solid white;
+  background-color: white;
+  cursor: default;
+}
+
+.box-seat {
+  width: 80px;
+  height: 28px;
+}
+
+.box-seat.available {
+  background-color: white;
+  border-color: #6F6C6C;
+  color: #333;
+}
+
+.box-seat.available:hover {
+  background-color: #f0f8ff;
+  border-color: #007bff;
+}
+
+.box-seat.selected {
+  background-color: #4CAF50;
+  color: white;
+  border-color: #6F6C6C;
+}
+
+.box-seat.booked {
+  background-color: #e8e8e8;
+  color: #999;
+  cursor: not-allowed;
+  border-color: #7D7A7A;
+}
+
+.odc-seat.available {
+  background-color: white;
+  border-color: #6F6C6C;
+  color: #333;
+}
+
+.odc-seat.available:hover {
+  background-color: #f0f8ff;
+  border-color: #007bff;
+}
+
+.odc-seat.selected {
+  background-color: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+
+.odc-seat.booked {
+  background-color: #e8e8e8;
+  color: #999;
+  cursor: not-allowed;
+  border-color: #7D7A7A;
+}
+
+.screen {
+  background: #D9D9D9;
+  padding: 5px;
+  text-align: center;
+  margin: 30px 20px 30px 100px;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+}
+
+.screen-text {
+  font-size: 12px;
+  font-weight: bold;
+  color: #948f8f;
+  letter-spacing: 2px;
+}
+
+.summary-section {
+  border-top: 2px solid #eee;
+  padding-top: 20px;
+  padding: 0 20%;
+}
+
+.selection-text {
+  text-align: center;
+  font-size: 14px;
+  color: #6F6C6C;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.package-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+.package-info {
+  flex: 1;
+}
+
+.package-name {
+  font-weight: bold;
+  font-size: 14px;
+  color: #464343;
+  margin-bottom: 2px;
+}
+
+.package-price {
+  font-size: 12px;
+  color: #666;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 2px solid #766161;
+  border-radius: 20px;
+  min-width: 30px;
+  padding: 0 10px ;
+}
+
+.quantity-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  /* border-radius: 50%; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.quantity-btn:hover {
+  /* background-color: #f5f5f5;
+  border-color: #007bff; */
+}
+
+.quantity-btn.minus {
+  color: #766161;
+}
+
+.quantity-btn.plus {
+  color: #766161;
+}
+
+.quantity-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.quantity {
+  font-weight: bold;
+  font-size: 16px;
+  color: #766161;
+  min-width: 20px;
+  text-align: center;
+}
+
+.proceed-btn {
+  width: 100%;
+  background-color: #1A67C6;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 30px 0;
+  transition: background-color 0.3s ease;
+}
+
+.proceed-btn:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 480px) {
+  .booking-container {
+    margin: 0;
+    padding: 15px;
+  }
+  
+  .showtimes {
+    gap: 5px;
+  }
+  
+  .showtime-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+  
+  .seat {
+    width: 28px;
+    height: 24px;
+    font-size: 9px;
+  }
+  
+  .seats-gap {
+    width: 15px;
+  }
+  
+  .box-seat {
+    width: 60px;
+  }
+}

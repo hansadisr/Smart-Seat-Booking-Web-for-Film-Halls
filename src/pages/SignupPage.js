@@ -6,22 +6,23 @@ import MovieGrid from '../components/MovieGrid';
 import AboutSection from '../components/AboutSection';
 import '../styles/LoginPage.css';
 
-const LoginPage = () => {
+const SignupPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleSignup = (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Login attempted with:', { email, password });
-    navigate('/movie');
+    // Handle signup logic here
+    console.log('Signup attempted with:', { email, password, confirmPassword });
+    navigate('/login');
   };
 
-  const handleSignUp = () => {
-    // Handle sign up navigation
-    console.log('Navigate to sign up');
-    navigate('/signup');
+  const handleLogin = () => {
+    // Handle login navigation
+    console.log('Navigate to login');
+    navigate('/login');
   };
 
   return (
@@ -33,10 +34,10 @@ const LoginPage = () => {
       </div>
 
       <div className="main-content">
-        {/* Login Modal */}
+        {/* Signup Modal */}
         <div className="login-modal">
-          <form className="login-form" onSubmit={handleLogin}>
-            <h2>Log In</h2>
+          <form className="login-form" onSubmit={handleSignup}>
+            <h2>Sign Up</h2>
             
             <div className="form-group">
               <label htmlFor="email">Email</label>
@@ -64,18 +65,31 @@ const LoginPage = () => {
               />
             </div>
             
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <input 
+                type="password" 
+                id="confirmPassword"
+                placeholder='Confirm your password'
+                className="form-input"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+            </div>
+            
             <div className="button-container">
-              <button type="submit" className="login-btn">Sign In</button>
+              <button type="submit" className="login-btn">Sign Up</button>
             </div>
             
             <div className="form-footer">
-              <span>Don't you have an account? </span>
+              <span>Do you already have an account? </span>
               <button 
                 type="button" 
                 className="signup-link"
-                onClick={handleSignUp}
+                onClick={handleLogin}
               >
-                Sign Up
+                Sign In
               </button>
             </div>
           </form>
@@ -87,4 +101,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignupPage;
