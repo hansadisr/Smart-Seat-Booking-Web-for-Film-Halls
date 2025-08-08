@@ -1,16 +1,31 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/Navbar.css';
 import { colors, images } from '../constants/theme';
 
 const Navbar = ({ onSignInClick, isLoginPage = false, isLoggedIn = false }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [hoveredLink, setHoveredLink] = useState(null);
 
   const handleSignInClick = () => {
     if (onSignInClick) {
       onSignInClick();
     }
     navigate('/login');
+  };
+
+  const handleNavigation = (path) => {
+    return (e) => {
+      e.preventDefault();
+      navigate(path);
+    };
+  };
+
+  const getLinkClass = (path) => {
+    return `nav-link ${location.pathname === path ? 'active' : ''} ${
+      hoveredLink === path ? 'hovered' : ''
+    }`;
   };
 
   return (
@@ -31,9 +46,36 @@ const Navbar = ({ onSignInClick, isLoginPage = false, isLoggedIn = false }) => {
           </div>
           
           <div className="nav-links">
-            <a href="#" className={`nav-link ${!isLoginPage ? 'active' : ''}`}>Home</a>
-            <a href="#" className="nav-link">Movies</a>
-            <a href="#" className="nav-link">Location</a>
+            <a
+              href="#"
+              className={getLinkClass('/')}
+              onClick={handleNavigation('/')}
+              onMouseEnter={() => setHoveredLink('/')}
+              onMouseLeave={() => setHoveredLink(null)}
+            >
+              Home
+              {hoveredLink === '/' && <span className="hover-tooltip"></span>}
+            </a>
+            <a
+              href="#"
+              className={getLinkClass('/movies')}
+              onClick={handleNavigation('/movies')}
+              onMouseEnter={() => setHoveredLink('/movies')}
+              onMouseLeave={() => setHoveredLink(null)}
+            >
+              Movies
+              {hoveredLink === '/movies' && <span className="hover-tooltip"></span>}
+            </a>
+            <a
+              href="#"
+              className={getLinkClass('/location')}
+              onClick={handleNavigation('/location')}
+              onMouseEnter={() => setHoveredLink('/location')}
+              onMouseLeave={() => setHoveredLink(null)}
+            >
+              Location
+              {hoveredLink === '/location' && <span className="hover-tooltip"></span>}
+            </a>
           </div>
         </div>
         
