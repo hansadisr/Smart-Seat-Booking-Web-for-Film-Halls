@@ -195,6 +195,7 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 25px;
+  flex-direction: row;
 }
 
 .form-checkbox {
