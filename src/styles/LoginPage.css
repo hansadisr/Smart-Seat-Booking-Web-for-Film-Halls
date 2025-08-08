@@ -1,133 +1,31 @@
 .loginpage {
-  background-color: #2c2c2c;
   min-height: 100vh;
-  color: white;
   position: relative;
 }
 
 .main-content {
   position: relative;
-}
-
-.movie-grid {
-  max-width: 1200px;
-  margin: 40px auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding: 0 20px;
+  margin-bottom: 40px;
 }
 
 .movie-grid.blurred {
   filter: blur(2px);
   opacity: 0.3;
   pointer-events: none;
-}
-
-.movie-card {
-  background-color: #ddd;
-  height: 200px;
-  border-radius: 8px;
-}
-
-.about-section {
-  max-width: 1200px;
-  margin: 60px auto;
-  padding: 0 20px;
-  position: relative;
   display: flex;
-  gap: 40px;
-  align-items: flex-start;
-}
-
-.about-left {
-  flex: 1;
-}
-
-.about-left.blurred {
-  filter: blur(2px);
-  opacity: 0.3;
-  pointer-events: none;
-}
-
-.about-left h3 {
-  font-size: 24px;
-  margin-bottom: 30px;
-  color: white;
-  font-weight: 500;
-}
-
-.about-content {
-  display: flex;
-  gap: 40px;
-  align-items: flex-start;
-}
-
-.about-image {
-  flex: 1;
-}
-
-.carousel-container {
-  position: relative;
-  background-color: #ddd;
-  height: 300px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.carousel-btn {
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-  font-size: 18px;
-  border-radius: 50%;
-  z-index: 2;
-}
-
-.carousel-btn.prev {
-  left: 10px;
-}
-
-.carousel-btn.next {
-  right: 10px;
-}
-
-.carousel-image {
-  width: 100%;
-  height: 100%;
-  background-color: #ccc;
-  border-radius: 8px;
-}
-
-.about-text {
-  flex: 1;
-  padding-top: 20px;
-}
-
-.about-text p {
-  line-height: 1.6;
-  color: #ddd;
-  font-size: 14px;
-  text-align: justify;
-  margin: 0;
+  flex-direction: column;
 }
 
 .login-modal {
   position: fixed;
   top: 50%;
-  right: 5%;
-  transform: translateY(-50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  width: 350px;
+  padding: 20px 40px 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px #D9D9D9;
+  width: 450px;
   z-index: 1000;
   max-height: 90vh;
   overflow-y: auto;
@@ -135,33 +33,38 @@
 
 .login-form {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .login-form h2 {
-  color: #ff6b6b;
+  color: #F22B2B;
   text-align: center;
-  margin: 0 0 30px 0;
-  font-size: 24px;
-  font-weight: 500;
+  margin: 0 0 10px 0;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .form-group {
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .form-group label {
   display: block;
-  color: #333;
+  color: #776B6B;
   margin-bottom: 8px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: bold;
 }
 
 .form-input {
   width: 100%;
   padding: 12px 15px;
-  border: 2px solid #ff6b6b;
-  border-radius: 5px;
+  border: 2px solid #b17373;
+  background-color: #D9D9D9;
+  border-radius: 15px;
   font-size: 14px;
   box-sizing: border-box;
   outline: none;
@@ -172,39 +75,44 @@
   border-color: #ff5252;
 }
 
+.button-container {
+  margin-top: 10px;
+  text-align: center;
+}
+
 .login-btn {
   width: 100%;
   background-color: #4a90e2;
   color: white;
   border: none;
-  padding: 12px;
-  border-radius: 5px;
+  padding: 12px 40px;
+  border-radius: 20px;
   font-size: 16px;
   cursor: pointer;
-  margin-top: 10px;
   transition: background-color 0.3s ease;
-  font-weight: 500;
+  font-weight: lighter;
 }
 
 .login-btn:hover {
-  background-color: #357abd;
+  background-color: #1A67C6;
 }
 
 .form-footer {
   text-align: center;
   margin-top: 20px;
-  color: #666;
+  color: #776B6B;
   font-size: 14px;
+  font-weight: bold;
 }
 
 .signup-link {
-  color: #4a90e2;
+  color: #002BFF;
   background: none;
   border: none;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: bold;
   cursor: pointer;
-  text-decoration: underline;
+  text-decoration: none;
   padding: 0;
 }
 
@@ -213,38 +121,19 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
-  .about-section {
-    flex-direction: column;
-  }
-  
+@media (max-width: 768px) {  
   .login-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    right: auto;
-    transform: translate(-50%, -50%);
     width: 90%;
     max-width: 350px;
-  }
-  
-  .movie-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
-  
-  .about-content {
-    flex-direction: column;
-    gap: 20px;
   }
 }
 
 @media (max-width: 480px) {
-  .movie-grid {
-    grid-template-columns: 1fr;
-  }
-  
   .login-modal {
     padding: 30px 20px;
+  }
+  
+  .login-btn {
+    width: 100%;
   }
 }

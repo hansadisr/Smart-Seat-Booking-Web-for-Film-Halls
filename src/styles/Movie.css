@@ -1,0 +1,178 @@
+.home-page {
+  background-color: #fff;
+}
+
+.movie-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  position: relative;
+  background-color: #f1f0f0;
+}
+
+/* Film Cover Banner */
+.film-cover-banner {
+  position: relative;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+.film-cover-overlay {
+  position: absolute;
+  bottom: -85px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.film-info-container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  width: 90%;
+  max-width: 1200px;
+  position: relative;
+}
+
+.cover-image-placeholder {
+  width: 140px;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.movie-details {
+  flex: 1;
+  /* color: #000; */
+}
+
+.movie-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #ffffff;
+  text-shadow: -1px -1px 0 #6F6C6C, 1px -1px 0 #6F6C6C, -1px 1px 0 #6F6C6C, 1px 1px 0 #6F6C6C;
+}
+
+.language {
+  display: block;
+  font-size: 0.9rem;
+  color: #ffffff;
+  text-shadow: -1px -1px 0 #6F6C6C, 1px -1px 0 #6F6C6C, -1px 1px 0 #6F6C6C, 1px 1px 0 #6F6C6C;
+}
+
+.genre-tags {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+  color: #ffffff;
+  text-shadow: -1px -1px 0 #6F6C6C, 1px -1px 0 #6F6C6C, -1px 1px 0 #6F6C6C, 1px 1px 0 #6F6C6C;
+}
+
+.genre-tag {
+  background-color: transparent;
+  border: 1px solid #ffffff;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: #ffffff;
+  text-shadow: -1px -1px 0 #6F6C6C, 1px -1px 0 #6F6C6C, -1px 1px 0 #6F6C6C, 1px 1px 0 #6F6C6C;
+}
+
+.release-date {
+  font-size: 0.9rem;
+  color: #6F6C6C;
+  /* text-shadow: -1px -1px 0 #6F6C6C, 1px -1px 0 #6F6C6C, -1px 1px 0 #6F6C6C, 1px 1px 0 #6F6C6C; */
+}
+
+.movie-description {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  max-width: 500px;
+  color: #6F6C6C;
+  /* text-shadow: -1px -1px 0 #6F6C6C, 1px -1px 0 #6F6C6C, -1px 1px 0 #6F6C6C, 1px 1px 0 #6F6C6C; */
+}
+
+.book-tickets-btn {
+  background-color: #0071eb;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.book-tickets-btn:hover {
+  background-color: #005bb5;
+}
+
+/* Cast Section */
+.cast-section {
+  background-color: #f1f0f0;
+  padding: 25px;
+  margin-top: 100px;
+  margin-left: 200px;
+}
+
+.cast-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.cast-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 50px;
+  max-width: 800px;
+}
+
+.cast-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cast-image-placeholder {
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  margin-bottom: 8px;
+  border: 5px solid #D9D9D9;
+}
+
+.cast-name {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.cast-designation {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .film-info-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .cover-image-placeholder {
+    width: 120px;
+    height: 170px;
+  }
+
+  .cast-section {
+    margin-left: 20px;
+  }
+}

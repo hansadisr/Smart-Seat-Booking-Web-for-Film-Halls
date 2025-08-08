@@ -1,5 +1,5 @@
 .navbar {
-  background-color: #1a1a1a;
+  background-color: #333545;
   padding: 15px 0;
 }
 
@@ -22,19 +22,30 @@
 .nav-center {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 15px;
   flex: 1;
   justify-content: center;
+  flex-direction: column;
 }
 
 .search-container {
   position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
 }
 
 .search-input {
   width: 300px;
-  padding: 10px 15px;
-  background-color: #3a3a3a;
+  padding: 10px 15px 10px 35px; 
+  background-color: #D9D9D9;
   border: 1px solid #555;
   border-radius: 5px;
   color: white;
@@ -43,7 +54,7 @@
 }
 
 .search-input::placeholder {
-  color: #aaa;
+  color: #000000;
 }
 
 .search-input:focus {
@@ -56,7 +67,7 @@
 }
 
 .nav-link {
-  color: #ccc;
+  color: #ffffff;
   text-decoration: none;
   font-size: 16px;
   transition: color 0.3s;
@@ -70,18 +81,19 @@
 }
 
 .nav-link:hover {
-  color: white;
+  color: #817c7c;
 }
 
 .signin-btn {
-  background-color: #4a90e2;
+  background-color: #1A67C6;
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 10px 50px;
+  border-radius: 20px;
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-weight: bold;
 }
 
 .signin-btn:hover {

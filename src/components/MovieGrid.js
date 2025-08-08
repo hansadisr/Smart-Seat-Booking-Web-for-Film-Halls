@@ -1,55 +1,108 @@
-import React, { useState } from 'react';
-import '../styles/MovieGrid.css';
+import React, { useState, useEffect, useRef } from "react";
+import "../styles/MovieGrid.css";
+import { images } from "../constants/theme";
 
 const MovieGrid = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  
-  // Mock movie data - replace with actual data
-  const movies = Array(8).fill().map((_, index) => ({
-    id: index + 1,
-    title: `Movie ${index + 1}`,
-    image: null // Will show placeholder
-  }));
+  const movies = [
+    {
+      id: 1,
+      title: "The Shawshank Redemption",
+      image: images.Film3
+    },
+    {
+      id: 2,
+      title: "The Godfather",
+      image: "https://image.tmdb.org/t/p/w300/3bhkrj58Vtu7enYsRolD1fZdja1.jpg"
+    },
+    {
+      id: 3,
+      title: "Pulp Fiction",
+      image: "https://image.tmdb.org/t/p/w300/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg"
+    },
+    {
+      id: 4,
+      title: "Inception",
+      image: "https://image.tmdb.org/t/p/w300/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg"
+    },
+    {
+      id: 5,
+      title: "The Dark Knight",
+      image: "https://image.tmdb.org/t/p/w300/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
+    },
+    {
+      id: 6,
+      title: "Fight Club",
+      image: "https://image.tmdb.org/t/p/w300/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg"
+    },
+    {
+      id: 7,
+      title: "Forrest Gump",
+      image: images.Film1
+    },
+    {
+      id: 8,
+      title: "The Matrix",
+      image: images.Film2
+    },
+    {
+      id: 9,
+      title: "Interstellar",
+      image: "https://image.tmdb.org/t/p/w300/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
+    }
+  ];
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % Math.ceil(movies.length / 4));
-  };
+  // Duplicate list for infinite effect
+  const movieList = [...movies, ...movies];
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + Math.ceil(movies.length / 4)) % Math.ceil(movies.length / 4));
-  };
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const trackRef = useRef(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => prev + 1);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (currentIndex >= movies.length) {
+      setTimeout(() => {
+        setCurrentIndex(0);
+        trackRef.current.style.transition = "none";
+        trackRef.current.style.transform = `translateX(0px)`;
+      }, 500);
+    } else {
+      trackRef.current.style.transition = "transform 0.5s ease";
+      trackRef.current.style.transform = `translateX(-${currentIndex * 285}px)`;
+    }
+  }, [currentIndex, movies.length]);
 
   return (
     <section className="movie-section">
       <div className="movie-container">
-        <div className="movie-grid-wrapper">
-          <button className="nav-arrow nav-arrow-left" onClick={prevSlide}>
-            ‹
-          </button>
-          
-          <div className="movie-grid">
-            {movies.slice(currentSlide * 4, (currentSlide + 1) * 4).map((movie) => (
-              <div key={movie.id} className="movie-card">
-                <div className="movie-placeholder">
-                  <span>Movie Poster</span>
-                </div>
+        <div className="carousel-wrapper">
+          <div className="carousel-track" ref={trackRef}>
+            {movieList.map((movie, index) => (
+              <div key={`${movie.id}-${index}`} className="movie-card">
+                <img src={movie.image} alt={movie.title} />
+                {/* <div className="movie-overlay">
+                  <h3>{movie.title}</h3>
+                  <button>View Details</button>
+                </div> */}
               </div>
             ))}
           </div>
-          
-          <button className="nav-arrow nav-arrow-right" onClick={nextSlide}>
-            ›
-          </button>
-        </div>
-        
-        <div className="slide-indicators">
-          {Array(Math.ceil(movies.length / 4)).fill().map((_, index) => (
-            <button
-              key={index}
-              className={`indicator ${index === currentSlide ? 'active' : ''}`}
-              onClick={() => setCurrentSlide(index)}
-            />
-          ))}
+
+          {/* Pagination Dots ON TOP of carousel */}
+          <div className="carousel-dots overlay-dots">
+            {movies.map((_, idx) => (
+              <span
+                key={idx}
+                className={`dot ${currentIndex % movies.length === idx ? "active" : ""}`}
+              ></span>
+            ))}
+          </div>
         </div>
       </div>
     </section>
