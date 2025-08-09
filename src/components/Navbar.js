@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Navbar.css';
 import { colors, images } from '../constants/theme';
@@ -9,6 +9,8 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
   const location = useLocation();
   const { isLoggedIn, logout } = useAuth();
   const [hoveredLink, setHoveredLink] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
 
   const handleSignInClick = () => {
     if (onSignInClick) {
@@ -30,6 +32,16 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
     }`;
   };
 
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    if (query) {
+      setSearchParams({ search: query });
+    } else {
+      setSearchParams({});
+    }
+  };
+
   return (
     <nav className="navbar">
       <div className="nav-container">
@@ -44,6 +56,8 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
               type="text"
               placeholder="Search for Movies"
               className="search-input"
+              value={searchQuery}
+              onChange={handleSearchChange}
             />
           </div>
           
