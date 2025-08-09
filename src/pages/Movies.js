@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import '../styles/Movies.css';
@@ -21,13 +22,16 @@ import up4 from '../assets/images/Film4.avif';
 import up5 from '../assets/images/Film4.avif';
 import up6 from '../assets/images/Film4.avif';
 import up7 from '../assets/images/Film4.avif';
+import { images } from '../constants/theme';
 
 const Movies = () => {
   const [showAllOnScreening, setShowAllOnScreening] = useState(false);
   const [showAllUpcoming, setShowAllUpcoming] = useState(false);
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get('search') || '';
 
   const onScreeningMovies = [
-    { id: 1, title: 'Movie 1', language: 'English', duration: '2h 15m', image: on1 },
+    { id: 1, title: 'Movie 1', language: 'English', duration: '2h 15m', image: images.Film1 },
     { id: 2, title: 'Movie 2', language: 'Sinhala', duration: '1h 50m', image: on2 },
     { id: 3, title: 'Movie 3', language: 'Tamil', duration: '2h 05m', image: on3 },
     { id: 4, title: 'Movie 4', language: 'English', duration: '2h 00m', image: on4 },
@@ -47,50 +51,58 @@ const Movies = () => {
     { id: 7, title: 'Upcoming 7', language: 'English', duration: '2h 10m', image: up7 }
   ];
 
+  const filterMovies = (movies) => {
+    if (!searchQuery) return movies;
+    return movies.filter(movie =>
+      movie.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+
   const renderMovies = (movies, showAll) => {
-    const moviesToShow = showAll ? movies : movies.slice(0, 4);
-    return moviesToShow.map(movie => (
-      <div key={movie.id} className="movie-card">
-        <img src={movie.image} alt={movie.title} />
-        <h4>{movie.title}</h4>
-        <p>{movie.language}</p>
-        <p>{movie.duration}</p>
-      </div>
-    ));
+    const filteredMovies = filterMovies(movies);
+    const moviesToShow = showAll ? filteredMovies : filteredMovies.slice(0, 6);
+    return moviesToShow.length > 0 ? (
+      moviesToShow.map(movie => (
+        <Link to="/movie" key={movie.id} className="movie-card1">
+          <div className="movie-image-container">
+            <img src={movie.image} alt={movie.title} />
+            <div className="movie-details1-overlay">
+              <div className="movie-details1">
+                <h4>{movie.title}</h4>
+                <div className="movie-info-row">
+                  <span className="movie-language">{movie.language}</span>
+                  <span className="movie-duration">{movie.duration}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Link>
+      ))
+    ) : (
+      <p>No movies found matching "{searchQuery}"</p>
+    );
   };
 
   return (
-    <div>
+    <div className="movies-page">
       <Navbar />
+      <div className="movie-container">
+        {/* On Screening Section */}
+        <section className="movies-section">
+          <h2>On Screening <span className="see-all-link" onClick={() => setShowAllOnScreening(!showAllOnScreening)}>See All</span></h2>
+          <div className="movies-grid">
+            {renderMovies(onScreeningMovies, showAllOnScreening)}
+          </div>
+        </section>
 
-      {/* On Screening Section */}
-      <section className="movies-section">
-        <h2>On Screening</h2>
-        <div className="movies-grid">
-          {renderMovies(onScreeningMovies, showAllOnScreening)}
-        </div>
-        <button
-          className="see-all-btn"
-          onClick={() => setShowAllOnScreening(!showAllOnScreening)}
-        >
-          {showAllOnScreening ? 'Show Less' : 'See All'}
-        </button>
-      </section>
-
-      {/* Upcoming Section */}
-      <section className="movies-section">
-        <h2>Upcoming</h2>
-        <div className="movies-grid">
-          {renderMovies(upcomingMovies, showAllUpcoming)}
-        </div>
-        <button
-          className="see-all-btn"
-          onClick={() => setShowAllUpcoming(!showAllUpcoming)}
-        >
-          {showAllUpcoming ? 'Show Less' : 'See All'}
-        </button>
-      </section>
-
+        {/* Upcoming Section */}
+        <section className="movies-section">
+          <h2>Upcoming <span className="see-all-link" onClick={() => setShowAllUpcoming(!showAllUpcoming)}>See All</span></h2>
+          <div className="movies-grid">
+            {renderMovies(upcomingMovies, showAllUpcoming)}
+          </div>
+        </section>
+      </div>
       <Footer />
     </div>
   );
