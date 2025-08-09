@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import '../styles/Navbar.css';
 import { colors, images } from '../constants/theme';
 
-const Navbar = ({ onSignInClick, isLoginPage = false, isLoggedIn = false }) => {
+const Navbar = ({ onSignInClick, isLoginPage = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isLoggedIn, logout } = useAuth();
   const [hoveredLink, setHoveredLink] = useState(null);
 
   const handleSignInClick = () => {
@@ -80,12 +82,25 @@ const Navbar = ({ onSignInClick, isLoginPage = false, isLoggedIn = false }) => {
         </div>
         
         {isLoggedIn ? (
-          <button 
-            className="signin-btn"
-            onClick={() => {/* Add your change booking handler here */}}
-          >
-            Change Booking
-          </button>
+          <div className="auth-buttons">
+            <button 
+              className="signin-btn"
+              onClick={() => {
+                navigate('/bookingList');
+              }}
+            >
+              Change Booking
+            </button>
+            <button 
+              className="logout-btn"
+              onClick={() => {
+                logout();
+                navigate('/login');
+              }}
+            >
+              Logout
+            </button>
+          </div>
         ) : (
           <button 
             className={`signin-btn ${isLoginPage ? 'active' : ''}`}
