@@ -34,6 +34,7 @@ const Navbar = ({ onSignInClick, isLoginPage = false, isLoggedIn = false }) => {
             <a href="#" className={`nav-link ${!isLoginPage ? 'active' : ''}`}>Home</a>
             <a href="#" className="nav-link">Movies</a>
             <a href="#" className="nav-link">Location</a>
+            
           </div>
         </div>
         
