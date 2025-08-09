@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import PurchaseSummary from '../components/PurchaseSummary';
 import { images } from '../constants/theme';
 import '../styles/Booking.css';
 
 const Booking = () => {
   const [selectedSeats, setSelectedSeats] = useState(['F-4', 'F-5']);
   const [selectedTime, setSelectedTime] = useState('01:30');
+  const [showPurchaseSummary, setShowPurchaseSummary] = useState(false);
   const [packages, setPackages] = useState([
     { name: 'ODC Full', price: 'LKR 1,500.00', count: 2 },
     { name: 'ODC Half', price: 'LKR 850.00', count: 0 },
@@ -110,6 +112,30 @@ const Booking = () => {
     if (selectedSeats.includes(seatId)) return 'selected';
     if (bookedSeatsByTime[selectedTime].includes(seatId)) return 'booked';
     return 'available';
+  };
+
+  const handleProceedClick = () => {
+    const totalTickets = packages.reduce((sum, pkg) => sum + pkg.count, 0);
+    const totalSelectedSeats = selectedSeats.length;
+    
+    if (totalSelectedSeats === 0) {
+      alert('Please select at least one seat');
+      return;
+    }
+    
+    if (totalTickets !== totalSelectedSeats) {
+      alert('Please select package types for all selected seats');
+      return;
+    }
+    
+    setShowPurchaseSummary(true);
+  };
+
+  const bookingData = {
+    selectedSeats,
+    time: selectedTime,
+    date: '2025-07-04',
+    packages: packages.filter(pkg => pkg.count > 0)
   };
 
   return (
@@ -268,9 +294,18 @@ const Booking = () => {
               )}
             </div>
           ))}
-          <button className="proceed-btn">Proceed</button>
+          <button className="proceed-btn" onClick={handleProceedClick}>
+            Proceed
+          </button>
         </div>
       </div>
+      
+      <PurchaseSummary 
+        isOpen={showPurchaseSummary}
+        onClose={() => setShowPurchaseSummary(false)}
+        bookingData={bookingData}
+      />
+      
       <Footer />
     </div>
   );
