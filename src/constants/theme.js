@@ -14,6 +14,8 @@ export const images = {
   facebook: require("../assets/icons/facebook.png"),
   instagram: require("../assets/icons/instagram.png"),
   calender: require("../assets/icons/calender.png"),
+  eye: require("../assets/icons/eye.png"),
+  eyeclose: require("../assets/icons/eyeclose.png"),
 
   // images
   ThreeD: require("../assets/images/3d.jpg"),
