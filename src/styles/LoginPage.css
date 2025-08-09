@@ -1,11 +1,13 @@
 .loginpage {
   min-height: 100vh;
   position: relative;
+  overflow-x: hidden;
 }
 
 .main-content {
   position: relative;
   margin-bottom: 40px;
+  z-index: 1;
 }
 
 .movie-grid.blurred {
@@ -29,6 +31,7 @@
   z-index: 1000;
   max-height: 90vh;
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .login-form {
@@ -49,6 +52,7 @@
 .form-group {
   margin-bottom: 20px;
   width: 100%;
+  position: relative; 
 }
 
 .form-group label {
@@ -73,6 +77,27 @@
 
 .form-input:focus {
   border-color: #ff5252;
+}
+
+.password-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.password-toggle-icon:hover {
+  opacity: 1;
 }
 
 .button-container {
@@ -114,6 +139,7 @@
   cursor: pointer;
   text-decoration: none;
   padding: 0;
+  margin-left: 5px;
 }
 
 .signup-link:hover {
@@ -125,15 +151,32 @@
   .login-modal {
     width: 90%;
     max-width: 350px;
+    padding: 20px;
+  }
+
+  .login-form h2 {
+    font-size: 20px;
   }
 }
 
 @media (max-width: 480px) {
   .login-modal {
-    padding: 30px 20px;
+    padding: 15px;
   }
   
   .login-btn {
     width: 100%;
+    padding: 10px 20px;
+  }
+
+  .form-input {
+    padding: 10px 15px;
+    padding-right: 35px;
+  }
+
+  .password-toggle-icon {
+    right: 8px;
+    width: 18px;
+    height: 15px;
   }
 }
