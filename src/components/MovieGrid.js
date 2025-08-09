@@ -80,9 +80,9 @@ const MovieGrid = () => {
 
   return (
     <section className="movie-section">
-      <div className="movie-container">
-        <div className="carousel-wrapper">
-          <div className="carousel-track" ref={trackRef}>
+      <div className="movie-container1">
+        <div className="carousel-wrapper1">
+          <div className="carousel-track1" ref={trackRef}>
             {movieList.map((movie, index) => (
               <div key={`${movie.id}-${index}`} className="movie-card">
                 <img src={movie.image} alt={movie.title} />
@@ -95,7 +95,7 @@ const MovieGrid = () => {
           </div>
 
           {/* Pagination Dots ON TOP of carousel */}
-          <div className="carousel-dots overlay-dots">
+          <div className="carousel-dots1 overlay-dots">
             {movies.map((_, idx) => (
               <span
                 key={idx}
