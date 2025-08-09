@@ -7,6 +7,7 @@ import Movie from './pages/Movie';
 import Booking from './pages/Booking';
 import BookingList from './pages/BookingList';
 import Location from './pages/Location';
+import Movies from './pages/Movies';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/booking" element={<Booking />} />
         <Route path="/bookingList" element={<BookingList />} />
         <Route path="/location" element={<Location />} />
+        <Route path="/movies" element={<Movies />} />
       </Routes>
     </Router>
   );
