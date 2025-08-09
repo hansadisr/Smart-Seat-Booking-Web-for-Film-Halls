@@ -2,18 +2,18 @@
   padding: 2rem 0 0 0;
 }
 
-.movie-container {
+.movie-container1 {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
 }
 
-.carousel-wrapper {
+.carousel-wrapper1 {
   overflow: hidden;
   position: relative;
 }
 
-.carousel-track {
+.carousel-track1 {
   display: flex;
   gap: 20px;
 }
@@ -81,7 +81,7 @@
 }
 
 /* Pagination Dots */
-.carousel-dots {
+.carousel-dots1 {
   display: flex;
   justify-content: center;
   margin-top: 10px;
