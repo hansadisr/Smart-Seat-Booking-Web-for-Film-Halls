@@ -25,7 +25,7 @@ const Movie = () => {
     <div className="home-page">
       <Navbar />
 
-      <div className="movie-container">
+      <div className="movie-container1">
         {/* Film Cover Banner */}
         <div className="film-cover-banner" style={{ backgroundImage: `url(${images.cover1})` }}>
           <div className="film-cover-overlay">
