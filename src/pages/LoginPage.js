@@ -30,7 +30,7 @@ const LoginPage = () => {
       if (response.data.success) {
         console.log('Login successful:', response.data);
         login(response.data.userId); // Update auth state
-        navigate('/movie');
+        navigate('/');
       }
     } catch (err) {
       const errorMsg = err.response?.data?.message || err.message || 'Login failed due to a connection error';
