@@ -9,6 +9,7 @@ const Booking = () => {
   const [selectedSeats, setSelectedSeats] = useState(['F-4', 'F-5']);
   const [selectedTime, setSelectedTime] = useState('01:30');
   const [showPurchaseSummary, setShowPurchaseSummary] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [packages, setPackages] = useState([
     { name: 'ODC Full', price: 'LKR 1,500.00', count: 2 },
     { name: 'ODC Half', price: 'LKR 850.00', count: 0 },
@@ -24,16 +25,8 @@ const Booking = () => {
   ];
 
   const boxSeats = [
-    { 
-      row: 'A', 
-      leftSeats: ['1', '2', '3'],
-      rightSeats: ['4', '5']
-    },
-    { 
-      row: 'B', 
-      leftSeats: ['1', '2', '3'],
-      rightSeats: ['4', '5']
-    },
+    { row: 'A', leftSeats: ['1', '2', '3'], rightSeats: ['4', '5'] },
+    { row: 'B', leftSeats: ['1', '2', '3'], rightSeats: ['4', '5'] },
   ];
 
   const odcSeats = [
@@ -56,10 +49,9 @@ const Booking = () => {
   };
 
   useEffect(() => {
-    // Reset selected seats and packages when time changes
     setSelectedSeats([]);
     setPackages(packages.map(pkg => ({ ...pkg, count: 0 })));
-  }, [selectedTime]);
+  }, [selectedTime, selectedDate]);
 
   const toggleSeat = (row, seat, isBox = false) => {
     const seatId = `${row}-${seat}`;
@@ -71,10 +63,9 @@ const Booking = () => {
         ? prevSelected.filter(id => id !== seatId)
         : [...prevSelected, seatId];
 
-      // Update box seat package count if box seat
       if (isBox) {
         const boxCount = newSelectedSeats.filter(seat => seat.startsWith('A-') || seat.startsWith('B-')).length;
-        setPackages(prevPackages => prevPackages.map(pkg => 
+        setPackages(prevPackages => prevPackages.map(pkg =>
           pkg.name === 'Box' ? { ...pkg, count: boxCount } : pkg
         ));
       }
@@ -90,13 +81,12 @@ const Booking = () => {
   };
 
   const handlePackageChange = (name, action) => {
-    if (name === 'Box') return; // Prevent modifying box seat count
+    if (name === 'Box') return;
     const totalSelectedSeats = selectedSeats.filter(seat => !seat.startsWith('A-') && !seat.startsWith('B-')).length;
     const totalTickets = packages.reduce((sum, pkg) => pkg.name !== 'Box' ? sum + pkg.count : sum, 0);
 
     setPackages(packages.map(pkg => {
       if (pkg.name !== name) return pkg;
-      
       if (action === 'increment') {
         if (totalTickets >= totalSelectedSeats) return pkg;
         return { ...pkg, count: pkg.count + 1 };
@@ -117,25 +107,33 @@ const Booking = () => {
   const handleProceedClick = () => {
     const totalTickets = packages.reduce((sum, pkg) => sum + pkg.count, 0);
     const totalSelectedSeats = selectedSeats.length;
-    
+
     if (totalSelectedSeats === 0) {
       alert('Please select at least one seat');
       return;
     }
-    
+
     if (totalTickets !== totalSelectedSeats) {
       alert('Please select package types for all selected seats');
       return;
     }
-    
+
     setShowPurchaseSummary(true);
   };
 
   const bookingData = {
     selectedSeats,
     time: selectedTime,
-    date: '2025-07-04',
+    date: selectedDate.toISOString().split('T')[0],
     packages: packages.filter(pkg => pkg.count > 0)
+  };
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
   };
 
   return (
@@ -143,11 +141,7 @@ const Booking = () => {
       <Navbar />
       <div className="booking-container">
         <div className="film-cover-section">
-          <img
-            className="film-cover-bg"
-            src={images.cover1}
-            alt="Cover Background"
-          />
+          <img className="film-cover-bg" src={images.cover1} alt="Cover Background" />
           <div className="film-cover-overlay1">
             <img className="film-poster1" src={images.Film2} alt="Movie Poster" />
             <div className="movie-info">
@@ -161,10 +155,16 @@ const Booking = () => {
             </div>
           </div>
         </div>
-
         <div className="date-section">
-          <img className="date-icon" src={images.calender} />
-          <span className="date-text">29th June, 225</span>
+          {/* <img className="date-icon" src={images.calender} alt="Calendar" /> */}
+          <input
+            type="date"
+            value={selectedDate.toISOString().split('T')[0]}
+            onChange={(e) => setSelectedDate(new Date(e.target.value))}
+            min={new Date().toISOString().split('T')[0]}
+            className="date-text"
+            style={{ border: 'none' }}
+          />
         </div>
 
         <div className="showtimes">
@@ -172,9 +172,7 @@ const Booking = () => {
             <button
               key={timeSlot.time}
               onClick={() => handleTimeSelect(timeSlot.time)}
-              className={`showtime-btn ${
-                selectedTime === timeSlot.time ? 'selected' : ''
-              }`}
+              className={`showtime-btn ${selectedTime === timeSlot.time ? 'selected' : ''}`}
             >
               <div className="time">{timeSlot.label}</div>
               <div className="session">a. m.</div>
@@ -279,8 +277,8 @@ const Booking = () => {
                 </div>
               ) : (
                 <div className="quantity-controls">
-                  <button 
-                    onClick={() => handlePackageChange(pkg.name, 'decrement')} 
+                  <button
+                    onClick={() => handlePackageChange(pkg.name, 'decrement')}
                     className="quantity-btn minus"
                     disabled={pkg.count === 0}
                   >-</button>
