@@ -103,7 +103,7 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
                 navigate('/bookingList');
               }}
             >
-              Change Booking
+              Show Booking
             </button>
             <button 
               className="logout-btn"
