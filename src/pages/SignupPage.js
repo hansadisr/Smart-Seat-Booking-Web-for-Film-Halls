@@ -10,6 +10,7 @@ import { images } from '../constants/theme';
 import '../styles/LoginPage.css';
 
 const SignupPage = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -28,6 +29,7 @@ const SignupPage = () => {
     }
     try {
       const response = await axios.post('http://localhost:8080/api/v1/users/create', {
+        name,
         email,
         password,
       }, {
@@ -36,7 +38,7 @@ const SignupPage = () => {
       if (response.data.success) {
         console.log('Signup successful:', response.data);
         login(response.data.userId);
-        navigate('/login');
+        navigate('/');
       }
     } catch (err) {
       const errorMsg = err.response?.data?.message || err.message || 'Signup failed due to a connection error';
@@ -69,6 +71,18 @@ const SignupPage = () => {
           <form className="login-form" onSubmit={handleSignup}>
             <h2>Sign Up</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input 
+                type="text" 
+                id="name"
+                placeholder='Enter your name'
+                className="form-input"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input 
