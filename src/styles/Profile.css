@@ -29,7 +29,7 @@
   border-radius: 8px;
 }
 
-.update-btn {
+.update-btn1 {
   width: 100%;
   padding: 10px;
   background-color: #ff6600;
@@ -42,6 +42,6 @@
   margin-top: 10px;
 }
 
-.update-btn:hover {
+.update-btn1:hover {
   background-color: #e65c00;
 }
