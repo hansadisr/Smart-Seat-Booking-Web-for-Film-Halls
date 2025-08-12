@@ -18,13 +18,16 @@ app.use(morgan('dev'));
 
 // routes
 app.use('/api/v1/users', require("./routes/userRoutes"));
+app.use('/api/v1/movies', require("./routes/movieRoutes"));
+app.use('/api/v1/shows', require("./routes/showRoutes"));
+app.use('/api/v1/bookings', require("./routes/bookingRoutes"));
 
 app.get('/test', (req, res) => {
   res.status(200).send("chi-NodeJs Mysql APP</h1>");
 });
 
 // port
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 
 // conditionally Listen
 mySqlPool
