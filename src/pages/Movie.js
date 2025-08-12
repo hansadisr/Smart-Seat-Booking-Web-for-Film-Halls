@@ -38,16 +38,22 @@ const Movie = () => {
 
       <div className="movie-container1">
         {/* Film Cover Banner */}
-        <div className="film-cover-banner" style={{ backgroundImage: `url(${movie.cover_image})` }}>
+        <div className="film-cover-banner" style={{ backgroundImage: `url(http://localhost:8080${movie.cover_image})` }}>
           <div className="film-cover-overlay">
             <div className="film-info-container">
-              <div className="cover-image-placeholder" style={{ backgroundImage: `url(${movie.image_url})` }}></div>
+              {/* Movie Image */}
+              <div 
+                className="cover-image-placeholder" 
+                style={{ backgroundImage: `url(http://localhost:8080${movie.image_url})` }}
+              ></div>
 
               <div className="movie-details">
                 <h1 className="movie-title">{movie.title}</h1>
                 <span className="language">English</span>
                 <div className="genre-tags">
-                  {movie.genre.split(',').map((g, idx) => <span key={idx} className="genre-tag">{g.trim()}</span>)}
+                  {movie.genre.split(',').map((g, idx) => (
+                    <span key={idx} className="genre-tag">{g.trim()}</span>
+                  ))}
                 </div>
                 <div className="release-date">{movie.release_date}</div>
                 <p className="movie-description">{movie.description}</p>
@@ -70,7 +76,11 @@ const Movie = () => {
           <div className="cast-grid">
             {casts.map(member => (
               <div key={member.cast_id} className="cast-member">
-                <div className="cast-image-placeholder" style={{ backgroundImage: `url(${member.profile_pic_url})` }}></div>
+                {/* Cast Image */}
+                <div 
+                  className="cast-image-placeholder" 
+                  style={{ backgroundImage: `url(http://localhost:8080${member.profile_pic_url})` }}
+                ></div>
                 <div className="cast-info">
                   <div className="cast-name">{member.name}</div>
                   <div className="cast-designation">{member.designation}</div>
