@@ -54,7 +54,7 @@ const Profile = () => {
         />
       </div>
 
-      <button className="update-btn" onClick={handleUpdate}>
+      <button className="update-btn1" onClick={handleUpdate}>
         Update
       </button>
     </div>
