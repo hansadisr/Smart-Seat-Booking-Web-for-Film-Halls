@@ -3,6 +3,8 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Navbar.css';
 import { colors, images } from '../constants/theme';
+import { FaUserCircle } from 'react-icons/fa'; // Profile icon
+
 
 const Navbar = ({ onSignInClick, isLoginPage = false }) => {
   const navigate = useNavigate();
@@ -41,6 +43,8 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
       setSearchParams({});
     }
   };
+  
+
 
   return (
     <nav className="navbar">
@@ -123,8 +127,17 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
             Sign in
           </button>
         )}
+         {isLoggedIn && (
+  <div className="profile-icon" onClick={() => navigate('/profile')}>
+    <FaUserCircle size={30} style={{ cursor: 'pointer', color: '#fff' }} />
+  </div>
+)}
+
       </div>
+     
     </nav>
+    // Inside return(), in the navbar right side (auth-buttons area)
+
   );
 };
 
