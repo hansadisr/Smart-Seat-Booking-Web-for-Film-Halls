@@ -70,7 +70,7 @@ const Booking = () => {
       }
     };
     if (movieId) {
-        fetchShows();
+      fetchShows();
     }
     setSelectedTime(null);
     setSelectedShowId(null);
@@ -209,9 +209,9 @@ const Booking = () => {
       <Navbar />
       <div className="booking-container">
         <div className="film-cover-section">
-          <img className="film-cover-bg" src={movie.cover_image} alt="Cover Background" />
+          <img className="film-cover-bg" src={`http://localhost:8080${movie.cover_image}`} alt="Cover Background" />
           <div className="film-cover-overlay1">
-            <img className="film-poster1" src={movie.image_url} alt="Movie Poster" />
+            <img className="film-poster1" src={`http://localhost:8080${movie.image_url}`} alt="Movie Poster" />
             <div className="movie-info">
               <h1 className="movie-title1">{movie.title}</h1>
               <div className="movie-subtitle">English</div>
