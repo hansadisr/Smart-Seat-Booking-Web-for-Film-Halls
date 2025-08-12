@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import '../styles/Profile.css';
 
 const Profile = () => {
@@ -22,41 +24,45 @@ const Profile = () => {
   };
 
   return (
-    <div className="profile-container">
-      <h2>My Profile</h2>
-      <div className="profile-field">
-        <label>Name</label>
-        <input 
-          type="text"
-          name="name"
-          value={profile.name}
-          onChange={handleChange}
-        />
-      </div>
+    <div className="profile-page">
+      <Navbar />
+      <div className="profile-container">
+        <h2>My Profile</h2>
+        <div className="profile-field">
+          <label>Name</label>
+          <input 
+            type="text"
+            name="name"
+            value={profile.name}
+            onChange={handleChange}
+          />
+        </div>
 
-      <div className="profile-field">
-        <label>Email</label>
-        <input 
-          type="email"
-          name="email"
-          value={profile.email}
-          onChange={handleChange}
-        />
-      </div>
+        <div className="profile-field">
+          <label>Email</label>
+          <input 
+            type="email"
+            name="email"
+            value={profile.email}
+            onChange={handleChange}
+          />
+        </div>
 
-      <div className="profile-field">
-        <label>Phone Number</label>
-        <input 
-          type="text"
-          name="phone"
-          value={profile.phone}
-          onChange={handleChange}
-        />
-      </div>
+        <div className="profile-field">
+          <label>Phone Number</label>
+          <input 
+            type="text"
+            name="phone"
+            value={profile.phone}
+            onChange={handleChange}
+          />
+        </div>
 
-      <button className="update-btn1" onClick={handleUpdate}>
-        Update
-      </button>
+        <button className="update-btn1" onClick={handleUpdate}>
+          Update
+        </button>
+      </div>
+      <Footer />
     </div>
   );
 };
