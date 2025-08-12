@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import PurchaseSummary from '../components/PurchaseSummary';
@@ -6,23 +8,20 @@ import { images } from '../constants/theme';
 import '../styles/Booking.css';
 
 const Booking = () => {
-  const [selectedSeats, setSelectedSeats] = useState(['F-4', 'F-5']);
-  const [selectedTime, setSelectedTime] = useState('01:30');
+  const { movieId } = useParams();
+  const [movie, setMovie] = useState(null);
+  const [selectedSeats, setSelectedSeats] = useState([]);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedShowId, setSelectedShowId] = useState(null);
   const [showPurchaseSummary, setShowPurchaseSummary] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [availableTimes, setAvailableTimes] = useState([]);
+  const [bookedSeats, setBookedSeats] = useState([]);
   const [packages, setPackages] = useState([
-    { name: 'ODC Full', price: 'LKR 1,500.00', count: 2 },
-    { name: 'ODC Half', price: 'LKR 850.00', count: 0 },
-    { name: 'Box', price: 'LKR 3,200.00', count: 0 },
+    { name: 'ODC Full', price: 'LKR 1500.00', count: 0 },
+    { name: 'ODC Half', price: 'LKR 750.00', count: 0 },
+    { name: 'Box', price: 'LKR 3200.00', count: 0 },
   ]);
-
-  const times = [
-    { time: '10:00', label: '10.00', available: true },
-    { time: '01:30', label: '01.30', available: true },
-    { time: '04:00', label: '04.00', available: true },
-    { time: '07:15', label: '07.15', available: true },
-    { time: '10:20', label: '10.20', available: true },
-  ];
 
   const boxSeats = [
     { row: 'A', leftSeats: ['1', '2', '3'], rightSeats: ['4', '5'] },
@@ -40,22 +39,64 @@ const Booking = () => {
     { row: 'J', leftSeats: ['', '', '1', '2', '3', '5'], rightSeats: ['4', '8', '9'] },
   ];
 
-  const bookedSeatsByTime = {
-    '10:00': ['E-7', 'G-3'],
-    '01:30': ['F-4', 'F-5'],
-    '04:00': ['C-2', 'D-8'],
-    '07:15': ['H-1', 'I-6'],
-    '10:20': ['J-3', 'G-9'],
-  };
+  useEffect(() => {
+    const fetchMovie = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/v1/movies/${movieId}`);
+        if (response.data.success) {
+          setMovie(response.data.movie);
+        }
+      } catch (error) {
+        console.error('Error fetching movie:', error);
+      }
+    };
+    fetchMovie();
+  }, [movieId]);
 
   useEffect(() => {
+    const fetchShows = async () => {
+      try {
+        const formattedDate = selectedDate.toISOString().split('T')[0];
+        const response = await axios.get(`http://localhost:8080/api/v1/shows/for_movie`, {
+          params: { movie_id: movieId, date: formattedDate }
+        });
+        if (response.data.success) {
+          setAvailableTimes(response.data.shows.map(s => ({ time: s.show_time.slice(0,5), show_id: s.show_id })));
+        }
+      } catch (error) {
+        console.error('Error fetching shows:', error);
+      }
+    };
+    fetchShows();
+    setSelectedTime(null);
+    setSelectedShowId(null);
     setSelectedSeats([]);
+    setBookedSeats([]);
     setPackages(packages.map(pkg => ({ ...pkg, count: 0 })));
-  }, [selectedTime, selectedDate]);
+  }, [selectedDate, movieId]);
+
+  useEffect(() => {
+    if (selectedShowId) {
+      const fetchBookedSeats = async () => {
+        try {
+          const response = await axios.get(`http://localhost:8080/api/v1/shows/${selectedShowId}/booked_seats`);
+          if (response.data.success) {
+            setBookedSeats(response.data.bookedSeats);
+          }
+        } catch (error) {
+          console.error('Error fetching booked seats:', error);
+          setBookedSeats([]); // Fallback to empty array on error
+        }
+      };
+      fetchBookedSeats();
+      setSelectedSeats([]);
+      setPackages(packages.map(pkg => ({ ...pkg, count: 0 })));
+    }
+  }, [selectedShowId]);
 
   const toggleSeat = (row, seat, isBox = false) => {
-    const seatId = `${row}-${seat}`;
-    if (!seat || bookedSeatsByTime[selectedTime].includes(seatId)) return;
+    const seatId = `Row${row}_Seat${seat}`; // Using RowX_SeatY format
+    if (!seat || bookedSeats.includes(seatId)) return;
 
     setSelectedSeats(prevSelected => {
       const isSelected = prevSelected.includes(seatId);
@@ -64,7 +105,7 @@ const Booking = () => {
         : [...prevSelected, seatId];
 
       if (isBox) {
-        const boxCount = newSelectedSeats.filter(seat => seat.startsWith('A-') || seat.startsWith('B-')).length;
+        const boxCount = newSelectedSeats.filter(seat => seat.startsWith('RowA_') || seat.startsWith('RowB_')).length;
         setPackages(prevPackages => prevPackages.map(pkg =>
           pkg.name === 'Box' ? { ...pkg, count: boxCount } : pkg
         ));
@@ -74,15 +115,14 @@ const Booking = () => {
     });
   };
 
-  const handleTimeSelect = (time) => {
-    if (times.find(t => t.time === time)?.available) {
-      setSelectedTime(time);
-    }
+  const handleTimeSelect = (time, showId) => {
+    setSelectedTime(time);
+    setSelectedShowId(showId);
   };
 
   const handlePackageChange = (name, action) => {
     if (name === 'Box') return;
-    const totalSelectedSeats = selectedSeats.filter(seat => !seat.startsWith('A-') && !seat.startsWith('B-')).length;
+    const totalSelectedSeats = selectedSeats.filter(seat => !seat.startsWith('RowA_') && !seat.startsWith('RowB_')).length;
     const totalTickets = packages.reduce((sum, pkg) => pkg.name !== 'Box' ? sum + pkg.count : sum, 0);
 
     setPackages(packages.map(pkg => {
@@ -98,9 +138,9 @@ const Booking = () => {
 
   const getSeatStatus = (row, seat) => {
     if (!seat) return 'empty';
-    const seatId = `${row}-${seat}`;
+    const seatId = `Row${row}_Seat${seat}`;
     if (selectedSeats.includes(seatId)) return 'selected';
-    if (bookedSeatsByTime[selectedTime].includes(seatId)) return 'booked';
+    if (bookedSeats.includes(seatId)) return 'booked';
     return 'available';
   };
 
@@ -125,38 +165,32 @@ const Booking = () => {
     selectedSeats,
     time: selectedTime,
     date: selectedDate.toISOString().split('T')[0],
-    packages: packages.filter(pkg => pkg.count > 0)
+    packages: packages.filter(pkg => pkg.count > 0),
+    showId: selectedShowId,
+    movieTitle: movie ? movie.title : ''
   };
 
-  const formatDate = (date) => {
-    return date.toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-  };
+  if (!movie) return <div>Loading...</div>;
 
   return (
     <div className="booking-page">
       <Navbar />
       <div className="booking-container">
         <div className="film-cover-section">
-          <img className="film-cover-bg" src={images.cover1} alt="Cover Background" />
+          <img className="film-cover-bg" src={movie.cover_image} alt="Cover Background" />
           <div className="film-cover-overlay1">
-            <img className="film-poster1" src={images.Film2} alt="Movie Poster" />
+            <img className="film-poster1" src={movie.image_url} alt="Movie Poster" />
             <div className="movie-info">
-              <h1 className="movie-title1">Title</h1>
-              <div className="movie-subtitle">Language</div>
+              <h1 className="movie-title1">{movie.title}</h1>
+              <div className="movie-subtitle">English</div>
               <div className="movie-tags">
-                <span className="tag">Action</span>
-                <span className="tag">Drama</span>
+                {movie.genre.split(',').map((g, idx) => <span key={idx} className="tag">{g.trim()}</span>)}
               </div>
-              <p className="movie-date">Date</p>
+              <p className="movie-date">{movie.release_date}</p>
             </div>
           </div>
         </div>
         <div className="date-section">
-          {/* <img className="date-icon" src={images.calender} alt="Calendar" /> */}
           <input
             type="date"
             value={selectedDate.toISOString().split('T')[0]}
@@ -168,13 +202,13 @@ const Booking = () => {
         </div>
 
         <div className="showtimes">
-          {times.map((timeSlot) => (
+          {availableTimes.map((timeSlot) => (
             <button
-              key={timeSlot.time}
-              onClick={() => handleTimeSelect(timeSlot.time)}
+              key={timeSlot.show_id}
+              onClick={() => handleTimeSelect(timeSlot.time, timeSlot.show_id)}
               className={`showtime-btn ${selectedTime === timeSlot.time ? 'selected' : ''}`}
             >
-              <div className="time">{timeSlot.label}</div>
+              <div className="time">{timeSlot.time}</div>
               <div className="session">a. m.</div>
             </button>
           ))}
@@ -262,8 +296,8 @@ const Booking = () => {
 
         <div className="summary-section">
           <p className="selection-text">
-            {selectedSeats.filter(seat => !seat.startsWith('A-') && !seat.startsWith('B-')).length} ODC ticket(s) and {selectedSeats.filter(seat => seat.startsWith('A-') || seat.startsWith('B-')).length} Box ticket(s) selected
-            {selectedSeats.filter(seat => !seat.startsWith('A-') && !seat.startsWith('B-')).length > 0 && ', please select ODC attendees'}
+            {selectedSeats.filter(seat => !seat.startsWith('RowA_') && !seat.startsWith('RowB_')).length} ODC ticket(s) and {selectedSeats.filter(seat => seat.startsWith('RowA_') || seat.startsWith('RowB_')).length} Box ticket(s) selected
+            {selectedSeats.filter(seat => !seat.startsWith('RowA_') && !seat.startsWith('RowB_')).length > 0 && ', please select ODC attendees'}
           </p>
           {packages.map((pkg) => (
             <div key={pkg.name} className="package-row">
@@ -286,7 +320,7 @@ const Booking = () => {
                   <button 
                     onClick={() => handlePackageChange(pkg.name, 'increment')} 
                     className="quantity-btn plus"
-                    disabled={packages.reduce((sum, p) => p.name !== 'Box' ? sum + p.count : sum, 0) >= selectedSeats.filter(seat => !seat.startsWith('A-') && !seat.startsWith('B-')).length}
+                    disabled={packages.reduce((sum, p) => p.name !== 'Box' ? sum + p.count : sum, 0) >= selectedSeats.filter(seat => !seat.startsWith('RowA_') && !seat.startsWith('RowB_')).length}
                   >+</button>
                 </div>
               )}

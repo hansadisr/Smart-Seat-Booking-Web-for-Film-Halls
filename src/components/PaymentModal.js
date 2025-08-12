@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Swal from 'sweetalert2';
 import '../styles/PaymentModal.css';
 
-const PaymentModal = ({ isOpen, onClose, totalAmount }) => {
+const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData }) => {
   const [paymentData, setPaymentData] = useState({
     cardNumber: '',
     expiryMonth: '',
@@ -12,6 +13,7 @@ const PaymentModal = ({ isOpen, onClose, totalAmount }) => {
     securityCode: ''
   });
   const navigate = useNavigate();
+  const userId = localStorage.getItem('userId');
 
   if (!isOpen) return null;
 
@@ -24,9 +26,7 @@ const PaymentModal = ({ isOpen, onClose, totalAmount }) => {
   };
 
   const formatCardNumber = (value) => {
-    // Remove all non-digits
     const digits = value.replace(/\D/g, '');
-    // Add spaces every 4 digits
     return digits.replace(/(\d{4})(?=\d)/g, '$1 ');
   };
 
@@ -38,10 +38,9 @@ const PaymentModal = ({ isOpen, onClose, totalAmount }) => {
     }));
   };
 
-  const handlePayment = (e) => {
+  const handlePayment = async (e) => {
     e.preventDefault();
     
-    // Basic validation
     if (!paymentData.cardNumber || !paymentData.expiryMonth || 
         !paymentData.expiryYear || !paymentData.cardholderName || 
         !paymentData.securityCode) {
@@ -53,17 +52,33 @@ const PaymentModal = ({ isOpen, onClose, totalAmount }) => {
       return;
     }
 
-    console.log('Processing payment:', paymentData);
-    // Handle payment processing here
-    Swal.fire({
-      icon: 'success',
-      title: 'Success!',
-      text: 'Payment processed successfully!',
-      confirmButtonText: 'OK'
-    }).then(() => {
-      onClose();
-      navigate('/bookingList');
-    });
+    try {
+      const response = await axios.post('http://localhost:8080/api/v1/bookings/create', {
+        user_id: userId,
+        show_id: bookingData.showId,
+        seats: bookingData.selectedSeats,
+        packages: bookingData.packages,
+        total_price: parseFloat(totalAmount),
+        phone: userData.mobileNumber
+      });
+      if (response.data.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Payment processed and booking created successfully!',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          onClose();
+          navigate('/bookingList');
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to create booking',
+      });
+    }
   };
 
   return (

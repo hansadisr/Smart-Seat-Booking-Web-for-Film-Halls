@@ -1,16 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 import PaymentModal from './PaymentModal';
 import '../styles/PurchaseSummary.css';
 
 const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
+  const { isLoggedIn } = useAuth();
+  const userId = localStorage.getItem('userId');
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     mobileNumber: '',
     email: '',
     agreeToTerms: false
   });
   const [showPayment, setShowPayment] = useState(false);
+
+  useEffect(() => {
+    if (isLoggedIn && userId) {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(`http://localhost:8080/api/v1/users/get/${userId}`);
+          if (response.data.success) {
+            const user = response.data.userDetails;
+            setFormData(prev => ({
+              ...prev,
+              name: user.name,
+              email: user.email
+            }));
+          }
+        } catch (error) {
+          console.error('Error fetching user:', error);
+        }
+      };
+      fetchUser();
+    }
+  }, [isLoggedIn, userId]);
 
   if (!isOpen) return null;
 
@@ -28,7 +52,6 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
       alert('Please agree to the terms & conditions');
       return;
     }
-    console.log('Proceeding with booking:', { ...bookingData, userDetails: formData });
     setShowPayment(true);
   };
 
@@ -54,7 +77,7 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
         <div className="booking-details">
           <div className="booking-info">
             <div className="film-details">
-              <span className="film-name">Film Name</span>
+              <span className="film-name">{bookingData.movieTitle}</span>
               <div className="show-details">
                 <span className="show-date">{bookingData.date}</span>
                 <span className="show-time">{bookingData.time}</span>
@@ -100,9 +123,9 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
           <div className="form-group">
             <input
               type="text"
-              name="firstName"
-              placeholder="First and Last Name"
-              value={formData.firstName}
+              name="name"
+              placeholder="Name"
+              value={formData.name}
               onChange={handleInputChange}
               className="form-input"
               required
@@ -156,6 +179,8 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
           isOpen={showPayment}
           onClose={() => setShowPayment(false)}
           totalAmount={totalAmount.toFixed(2)}
+          bookingData={bookingData}
+          userData={formData}
         />
       </div>
     </div>
