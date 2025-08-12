@@ -9,6 +9,7 @@ import Booking from './pages/Booking';
 import BookingList from './pages/BookingList';
 import Location from './pages/Location';
 import Movies from './pages/Movies';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/bookingList" element={<BookingList />} />
           <Route path="/location" element={<Location />} />
           <Route path="/movies" element={<Movies />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Router>
     </AuthProvider>

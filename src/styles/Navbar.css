@@ -124,3 +124,12 @@
 .logout-btn:hover {
   background-color: #cc0000;
 }
+ .profile-icon {
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+}
+
+.profile-icon:hover {
+  color: #ff6600; /* hover color */
+}
