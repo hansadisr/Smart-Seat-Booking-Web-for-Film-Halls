@@ -16,7 +16,7 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
   const [showPayment, setShowPayment] = useState(false);
 
   useEffect(() => {
-    if (isLoggedIn && userId) {
+    if (isOpen && isLoggedIn && userId) {
       const fetchUser = async () => {
         try {
           const response = await axios.get(`http://localhost:8080/api/v1/users/get/${userId}`);
@@ -25,7 +25,8 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
             setFormData(prev => ({
               ...prev,
               name: user.name,
-              email: user.email
+              email: user.email,
+              mobileNumber: user.telephone || '' // Pre-fill phone if available
             }));
           }
         } catch (error) {
@@ -34,7 +35,7 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
       };
       fetchUser();
     }
-  }, [isLoggedIn, userId]);
+  }, [isOpen, isLoggedIn, userId]); // Rerun if the modal is opened again
 
   if (!isOpen) return null;
 
@@ -86,18 +87,29 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
           </div>
 
           <div className="ticket-breakdown">
-            {bookingData.packages.filter(pkg => pkg.count > 0).map((pkg, index) => (
-              <div key={index} className="ticket-item">
-                <span className="ticket-type">
-                  {pkg.name} - {bookingData.selectedSeats.filter(seat => 
-                    pkg.name === 'Box' ? 
-                    (seat.startsWith('A-') || seat.startsWith('B-')) : 
-                    (!seat.startsWith('A-') && !seat.startsWith('B-'))
-                  ).join(', ')} ({pkg.count} Ticket{pkg.count > 1 ? 's' : ''})
-                </span>
-                <span className="ticket-price">{pkg.price}</span>
-              </div>
-            ))}
+            {bookingData.packages.filter(pkg => pkg.count > 0).map((pkg, index) => {
+              // Helper function to extract and format seat numbers
+              const getSeatNumbers = (isBox) => {
+                return bookingData.selectedSeats
+                  .filter(seat => {
+                    const isBoxSeat = seat.startsWith('RowA_') || seat.startsWith('RowB_');
+                    return isBox ? isBoxSeat : !isBoxSeat;
+                  })
+                  .map(seat => seat.replace('Row', '').replace('_Seat', '')) // Transforms "RowA_Seat1" to "A1"
+                  .join(', ');
+              };
+
+              const seatsList = getSeatNumbers(pkg.name === 'Box');
+
+              return (
+                <div key={index} className="ticket-item">
+                  <span className="ticket-type">
+                    {pkg.name} - {seatsList} ({pkg.count} Ticket{pkg.count > 1 ? 's' : ''})
+                  </span>
+                  <span className="ticket-price">{pkg.price}</span>
+                </div>
+              );
+            })}
             
             <div className="fee-item">
               <span className="fee-label">Internet handling fees</span>
