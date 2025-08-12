@@ -24,11 +24,11 @@ const BookingList = () => {
         }
       } catch (err) {
         if (err.response && err.response.status === 404) {
-            setBookings([]); // No bookings found, which is not an error
-            setError(null);
+          setBookings([]); // No bookings found, which is not an error
+          setError(null);
         } else {
-            setError('Failed to load bookings. Please try again later.');
-            console.error('Error fetching bookings:', err);
+          setError('Failed to load bookings. Please try again later.');
+          console.error('Error fetching bookings:', err);
         }
       }
     };
@@ -84,7 +84,7 @@ const BookingList = () => {
 
     Swal.fire({
       title: 'Booking Details',
-      html: `
+      html: ` 
         <div style="text-align: left; padding-left: 20px;">
           <p><strong>Movie:</strong> ${booking.title || 'N/A'}</p>
           <p><strong>Date:</strong> ${formattedDate}</p>
@@ -116,8 +116,9 @@ const BookingList = () => {
             bookings.map((booking) => (
               <div key={booking.booking_id} className="booking-card">
                 <div className="film-image-container">
+                  {/* Correctly handle the image URL */}
                   <img 
-                    src={booking.image_url || '/assets/images/default.jpg'} 
+                    src={booking.image_url ? `http://localhost:8080${booking.image_url}` : '/assets/images/default.jpg'} 
                     alt={booking.title || 'Movie Poster'}
                     className="film-image"
                   />
