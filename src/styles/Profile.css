@@ -72,3 +72,55 @@
     padding: 8px;
   }
 }
+
+.profile-field input.read-only {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+  color: #555;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.save-btn, .cancel-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.save-btn {
+  background-color: #28a745;
+}
+
+.save-btn:hover {
+  background-color: #218838;
+}
+
+.cancel-btn {
+  background-color: #6c757d;
+}
+
+.cancel-btn:hover {
+  background-color: #5a6268;
+}
+
+.error-message {
+  color: #dc3545;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.success-message {
+  color: #28a745;
+  text-align: center;
+  margin-bottom: 15px;
+}
