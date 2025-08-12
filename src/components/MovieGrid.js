@@ -80,7 +80,7 @@ const MovieGrid = () => {
 
   return (
     <section className="movie-section">
-      <div className="movie-container1">
+      <div className="movie-container2">
         <div className="carousel-wrapper1">
           <div className="carousel-track1" ref={trackRef}>
             {movieList.map((movie, index) => (
