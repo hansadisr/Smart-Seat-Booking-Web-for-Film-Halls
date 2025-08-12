@@ -59,17 +59,17 @@ const getUserByID = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
       return res.status(400).send({
         success: false,
-        message: 'Email and password are required'
+        message: 'Name, email, and password are required'
       });
     }
 
     const [result] = await db.query(
-      'INSERT INTO users (email, password) VALUES (?, ?)',
-      [email, password]
+      'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+      [name, email, password]
     );
 
     if (result.affectedRows === 0) {
