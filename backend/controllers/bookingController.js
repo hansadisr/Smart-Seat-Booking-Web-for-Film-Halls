@@ -75,28 +75,30 @@ const getUserBookings = async (req, res) => {
       let parsedSeats = [];
       let parsedPackages = [];
 
+      // Try to parse seats
       try {
-        // Try parsing as JSON first
-        parsedSeats = b.seats ? JSON.parse(b.seats) : [];
-        parsedPackages = b.packages ? JSON.parse(b.packages) : [];
-      } catch (parseError) {
-        console.error(`Error parsing JSON for booking ${b.booking_id}:`, parseError);
-        // Fallback for comma-separated strings
-        if (typeof b.seats === 'string' && b.seats.includes(',')) {
+        // This will work if the data is a valid JSON array string, e.g., '["C-2", "C-3"]'
+        parsedSeats = JSON.parse(b.seats);
+      } catch (e) {
+        // This is the fallback if JSON.parse fails
+        if (typeof b.seats === 'string') {
+          // Handles plain comma-separated strings, e.g., 'C-2,C-3'
           parsedSeats = b.seats.split(',').map(s => s.trim());
+        } else {
+          // If it's something else (like null or already an array), default to empty
+          parsedSeats = Array.isArray(b.seats) ? b.seats : [];
         }
-        if (typeof b.packages === 'string' && b.packages.includes(',')) {
-          parsedPackages = b.packages.split(',').map(s => {
-            const [name, count] = s.trim().split('x').map(part => part.trim());
-            return { name: name || s.trim(), count: parseInt(count) || 1 };
-          });
-        } else if (typeof b.packages === 'string') {
-          try {
-            parsedPackages = JSON.parse(`[${b.packages}]`.replace(/\[object Object\]/g, '{}'));
-          } catch (e) {
-            parsedPackages = [];
-          }
-        }
+      }
+      
+      // Try to parse packages
+      try {
+         // This will work for valid JSON array of objects
+        parsedPackages = JSON.parse(b.packages);
+      } catch (e) {
+        // Fallback for bad data like '[object Object],[object Object]'
+        // This data is corrupted and cannot be recovered, so we default to an empty array.
+        // Your new bookings will be stored correctly and won't hit this fallback.
+        parsedPackages = []; 
       }
 
       return {
@@ -116,7 +118,6 @@ const getUserBookings = async (req, res) => {
       success: false,
       message: 'Error in Get User Bookings API',
       error: error.message,
-      stack: error.stack
     });
   }
 };
