@@ -43,7 +43,12 @@ const Movies = () => {
       moviesToShow.map(movie => (
         <Link to={`/movie/${movie.movie_id}`} key={movie.movie_id} className="movie-card1">
           <div className="movie-image-container">
-            <img src={movie.image_url} alt={movie.title} />
+            {/* Update Image Source */}
+            <img 
+              src={`http://localhost:8080${movie.image_url}`} 
+              alt={movie.title} 
+              className="movie-image"
+            />
             <div className="movie-details1-overlay">
               <div className="movie-details1">
                 <h4>{movie.title}</h4>
