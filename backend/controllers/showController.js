@@ -13,33 +13,26 @@ const getShowsForMovie = async (req, res) => {
 const getBookedSeatsForShow = async (req, res) => {
   try {
     const show_id = req.params.show_id;
+    // 1. Query the database for the specific show
     const [bookings] = await db.query('SELECT seats FROM bookings WHERE show_id = ?', [show_id]);
     let bookedSeats = [];
 
+    // 2. Aggregate all seats from all bookings for that show
     bookings.forEach(b => {
-      console.log(`Processing booking for show ${show_id}, raw seats: ${b.seats}`);
-      try {
-        // Try parsing as JSON first
-        const parsedSeats = b.seats ? JSON.parse(b.seats) : [];
-        bookedSeats = bookedSeats.concat(Array.isArray(parsedSeats) ? parsedSeats : []);
-      } catch (parseError) {
-        console.error(`Error parsing JSON for show ${show_id}:`, parseError);
-        // Fallback for comma-separated strings
-        if (typeof b.seats === 'string' && b.seats.includes(',')) {
-          const fixedSeats = b.seats.split(',').map(s => s.trim());
-          bookedSeats = bookedSeats.concat(fixedSeats);
+        try {
+            const parsedSeats = b.seats ? JSON.parse(b.seats) : [];
+            bookedSeats = bookedSeats.concat(Array.isArray(parsedSeats) ? parsedSeats : []);
+        } catch (e) {
+            if (typeof b.seats === 'string') {
+                bookedSeats = bookedSeats.concat(b.seats.split(',').map(s => s.trim()));
+            }
         }
-      }
     });
 
+    // 3. Send the complete list back to the frontend
     res.status(200).send({ success: true, bookedSeats });
   } catch (error) {
-    console.error('Error in getBookedSeatsForShow:', error);
-    res.status(500).send({
-      success: false,
-      message: 'Error in Get Booked Seats API',
-      error: error.message
-    });
+    // ... error handling
   }
 };
 

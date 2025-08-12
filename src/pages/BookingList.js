@@ -12,69 +12,89 @@ const BookingList = () => {
 
   useEffect(() => {
     const fetchBookings = async () => {
+      if (!userId) {
+        setError("Please log in to see your bookings.");
+        return;
+      }
       try {
         const response = await axios.get(`http://localhost:8080/api/v1/bookings/user/${userId}`);
         if (response.data.success) {
           setBookings(response.data.bookings);
           setError(null);
-        } else {
-          setError(response.data.message || 'Failed to fetch bookings');
         }
-      } catch (error) {
-        console.error('Error fetching bookings:', error.response ? error.response.data : error.message);
-        setError(error.response?.data?.message || 'Failed to load bookings. Please try again later.');
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error.response?.data?.message || 'An unexpected error occurred.',
-        });
+      } catch (err) {
+        if (err.response && err.response.status === 404) {
+            setBookings([]); // No bookings found, which is not an error
+            setError(null);
+        } else {
+            setError('Failed to load bookings. Please try again later.');
+            console.error('Error fetching bookings:', err);
+        }
       }
     };
-    if (userId) fetchBookings();
+    fetchBookings();
   }, [userId]);
 
   const handleDelete = async (bookingId) => {
     Swal.fire({
       title: 'Are you sure?',
-      text: `Do you want to delete this booking?`,
+      text: `Do you want to cancel this booking?`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#e74c3c',
-      cancelButtonColor: '#3498db',
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel'
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, cancel it!'
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           const response = await axios.delete(`http://localhost:8080/api/v1/bookings/${bookingId}`);
           if (response.data.success) {
             setBookings(bookings.filter(b => b.booking_id !== bookingId));
-            Swal.fire('Deleted!', 'The booking has been deleted.', 'success');
+            Swal.fire('Cancelled!', 'The booking has been cancelled.', 'success');
           }
         } catch (error) {
-          Swal.fire('Error', 'Failed to delete booking', 'error');
+          Swal.fire('Error', 'Failed to cancel booking.', 'error');
         }
       }
     });
   };
+  
+  // Helper function to format 24-hour time to 12-hour AM/PM format
+  const formatTime = (timeString) => {
+    if (!timeString) return 'N/A';
+    const [hours, minutes] = timeString.split(':');
+    const h = parseInt(hours);
+    const m = parseInt(minutes);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const formattedHours = h % 12 || 12; // Convert 0 to 12 for 12 AM
+    return `${String(formattedHours).padStart(2, '0')}:${String(m).padStart(2, '0')} ${ampm}`;
+  };
 
   const handleShowDetails = (booking) => {
     const seatsText = Array.isArray(booking.seats) && booking.seats.length > 0
-      ? booking.seats.map(seat => seat).join(', ')
-      : booking.seats || 'No seats selected';
+      ? booking.seats.map(seat => seat.replace('Row', '').replace('_Seat', '')).join(', ')
+      : 'No seats selected';
+      
     const packagesText = Array.isArray(booking.packages) && booking.packages.length > 0
-      ? booking.packages.map(p => `${p.name} (${p.count || 0})`).join(', ')
-      : booking.packages || 'No packages selected';
+      ? booking.packages.map(p => `${p.name} (${p.count || 0})`).join('<br>')
+      : 'No packages selected';
+
+    const formattedTime = formatTime(booking.show_time);
+    const formattedDate = booking.show_date ? new Date(booking.show_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A';
 
     Swal.fire({
       title: 'Booking Details',
       html: `
-        <p><strong>Movie:</strong> ${booking.title || 'N/A'}</p>
-        <p><strong>Date:</strong> ${booking.show_date || 'N/A'}</p>
-        <p><strong>Time:</strong> ${booking.show_time || 'N/A'}</p>
-        <p><strong>Seats:</strong> ${seatsText}</p>
-        <p><strong>Packages:</strong> ${packagesText}</p>
-        <p><strong>Total Price:</strong> ${booking.total_price || 'N/A'}</p>
+        <div style="text-align: left; padding-left: 20px;">
+          <p><strong>Movie:</strong> ${booking.title || 'N/A'}</p>
+          <p><strong>Date:</strong> ${formattedDate}</p>
+          <p><strong>Time:</strong> ${formattedTime}</p>
+          <p><strong>Seats:</strong> ${seatsText}</p>
+          <p><strong>Packages:</strong></p>
+          <div style="padding-left: 20px;">${packagesText}</div>
+          <p><strong>Total Price:</strong> LKR ${parseFloat(booking.total_price || 0).toFixed(2)}</p>
+          <p><strong>Contact Phone:</strong> ${booking.phone || 'N/A'}</p>
+        </div>
       `,
       icon: 'info',
       confirmButtonText: 'Close'
@@ -85,19 +105,16 @@ const BookingList = () => {
     <div className="bookings-page">
       <Navbar />
       <div className="container">
-        <h2 className="bookings-title">Bookings</h2>
+        <h2 className="bookings-title">My Bookings</h2>
         {error && <p className="error-message">{error}</p>}
         <div className="bookings-grid">
           {bookings.length === 0 && !error ? (
-            <p>No bookings found.</p>
+            <div className="no-bookings-message">
+              <p>You have no bookings yet.</p>
+            </div>
           ) : (
             bookings.map((booking) => (
               <div key={booking.booking_id} className="booking-card">
-                <div className="film-details-header">
-                  <h3 className="film-name">{booking.title || 'Unknown Movie'}</h3>
-                  <p className="film-date">{booking.show_date || 'N/A'}</p>
-                  <p className="film-time">{booking.show_time || 'N/A'}</p>
-                </div>
                 <div className="film-image-container">
                   <img 
                     src={booking.image_url || '/assets/images/default.jpg'} 
@@ -105,12 +122,17 @@ const BookingList = () => {
                     className="film-image"
                   />
                 </div>
+                <div className="film-details-header">
+                  <h3 className="film-name">{booking.title || 'Unknown Movie'}</h3>
+                  <p className="film-date">{booking.show_date ? new Date(booking.show_date).toLocaleDateString('en-GB', { day:'numeric', month: 'short', year: 'numeric' }) : 'N/A'}</p>
+                  <p className="film-time">{formatTime(booking.show_time)}</p>
+                </div>
                 <div className="button-group">
                   <button 
                     className="delete-btn" 
                     onClick={() => handleDelete(booking.booking_id)}
                   >
-                    Delete
+                    Cancel
                   </button>
                   <button 
                     className="update-btn"
