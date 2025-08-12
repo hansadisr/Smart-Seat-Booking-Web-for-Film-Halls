@@ -131,4 +131,42 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, getUserByID, createUser, loginUser };
+const updateUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { name, email, telephone } = req.body;
+
+    if (!name || !email) {
+      return res.status(400).send({
+        success: false,
+        message: 'Name and email are required',
+      });
+    }
+
+    const [result] = await db.query(
+      'UPDATE users SET name = ?, email = ?, telephone = ? WHERE user_id = ?',
+      [name, email, telephone, userId]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).send({
+        success: false,
+        message: 'User not found or no changes made',
+      });
+    }
+
+    res.status(200).send({
+      success: true,
+      message: 'User profile updated successfully',
+    });
+  } catch (error) {
+    console.log('Error in updateUser:', error);
+    res.status(500).send({
+      success: false,
+      message: 'Error in Update User API',
+      error: error.message,
+    });
+  }
+};
+
+module.exports = { getUsers, getUserByID, createUser, loginUser, updateUser };
