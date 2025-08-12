@@ -1,46 +1,56 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import '../styles/Movie.css';
-import { images } from '../constants/theme';
 
 const Movie = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const [movie, setMovie] = useState(null);
+  const [casts, setCasts] = useState([]);
 
-  const castMembers = [
-    { id: 1, name: 'Name', designation: 'Designation', image: images.cast1 },
-    { id: 2, name: 'Name', designation: 'Designation', image: images.cast2 },
-    { id: 3, name: 'Name', designation: 'Designation', image: images.cast3 },
-    { id: 4, name: 'Name', designation: 'Designation', image: images.cast4 },
-    { id: 5, name: 'Name', designation: 'Designation', image: images.cast5 },
-    { id: 6, name: 'Name', designation: 'Designation', image: images.cast6 }
-  ];
+  useEffect(() => {
+    const fetchMovie = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/v1/movies/${id}`);
+        if (response.data.success) {
+          setMovie(response.data.movie);
+          setCasts(response.data.casts);
+        }
+      } catch (error) {
+        console.error('Error fetching movie:', error);
+      }
+    };
+    fetchMovie();
+  }, [id]);
 
   const handleBookTickets = () => {
-    navigate('/booking');
+    navigate(`/booking/${id}`);
   };
+
+  if (!movie) return <div>Loading...</div>;
 
   return (
     <div className="home-page">
       <Navbar />
 
-      <div className="movie-container">
+      <div className="movie-container1">
         {/* Film Cover Banner */}
-        <div className="film-cover-banner" style={{ backgroundImage: `url(${images.cover1})` }}>
+        <div className="film-cover-banner" style={{ backgroundImage: `url(${movie.cover_image})` }}>
           <div className="film-cover-overlay">
             <div className="film-info-container">
-              <div className="cover-image-placeholder" style={{ backgroundImage: `url(${images.Film2})` }}></div>
+              <div className="cover-image-placeholder" style={{ backgroundImage: `url(${movie.image_url})` }}></div>
 
               <div className="movie-details">
-                <h1 className="movie-title">Title</h1>
-                <span className="language">Language</span>
+                <h1 className="movie-title">{movie.title}</h1>
+                <span className="language">English</span>
                 <div className="genre-tags">
-                  <span className="genre-tag">Action</span>
-                  <span className="genre-tag">Drama</span>
+                  {movie.genre.split(',').map((g, idx) => <span key={idx} className="genre-tag">{g.trim()}</span>)}
                 </div>
-                <div className="release-date">Date</div>
-                <p className="movie-description">Description</p>
+                <div className="release-date">{movie.release_date}</div>
+                <p className="movie-description">{movie.description}</p>
               </div>
 
               <button 
@@ -58,9 +68,9 @@ const Movie = () => {
         <div className="cast-section">
           <h2 className="cast-title">Cast</h2>
           <div className="cast-grid">
-            {castMembers.map(member => (
-              <div key={member.id} className="cast-member">
-                <div className="cast-image-placeholder" style={{ backgroundImage: `url(${member.image})` }}></div>
+            {casts.map(member => (
+              <div key={member.cast_id} className="cast-member">
+                <div className="cast-image-placeholder" style={{ backgroundImage: `url(${member.profile_pic_url})` }}></div>
                 <div className="cast-info">
                   <div className="cast-name">{member.name}</div>
                   <div className="cast-designation">{member.designation}</div>
