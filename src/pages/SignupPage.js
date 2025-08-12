@@ -36,7 +36,7 @@ const SignupPage = () => {
       if (response.data.success) {
         console.log('Signup successful:', response.data);
         login(response.data.userId);
-        navigate('/login');
+        navigate('/');
       }
     } catch (err) {
       const errorMsg = err.response?.data?.message || err.message || 'Signup failed due to a connection error';
