@@ -1,35 +1,40 @@
 const express = require('express');
+const path = require('path');
 const colors = require('colors');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
-const mySqlPool = require('./config/db');
 const cors = require('cors');
+const mySqlPool = require('./config/db');
 
-//configure dotenv
+// Configure dotenv
 dotenv.config();
 
-//rest object
+// Initialize the Express app
 const app = express();
 
-// middlewares
-app.use(cors());
-app.use(express.json());
-app.use(morgan('dev'));
+// Middlewares
+app.use(cors()); // To allow cross-origin requests
+app.use(express.json()); // To parse JSON data
+app.use(morgan('dev')); // To log requests for development
 
-// routes
+// Serve static files (images)
+app.use('/assets/images', express.static(path.join(__dirname, 'assets', 'images')));
+
+// Routes
 app.use('/api/v1/users', require("./routes/userRoutes"));
 app.use('/api/v1/movies', require("./routes/movieRoutes"));
 app.use('/api/v1/shows', require("./routes/showRoutes"));
 app.use('/api/v1/bookings', require("./routes/bookingRoutes"));
 
+// Test route
 app.get('/test', (req, res) => {
-  res.status(200).send("chi-NodeJs Mysql APP</h1>");
+  res.status(200).send("Node.js MySQL App");
 });
 
-// port
+// Port
 const PORT = process.env.PORT || 8080;
 
-// conditionally Listen
+// MySQL Connection & Start the server
 mySqlPool
   .query("SELECT 1")
   .then(() => {
