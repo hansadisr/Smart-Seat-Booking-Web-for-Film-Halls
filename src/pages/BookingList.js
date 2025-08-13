@@ -18,18 +18,13 @@ const BookingList = () => {
       }
       try {
         const response = await axios.get(`http://localhost:8080/api/v1/bookings/user/${userId}`);
-        if (response.data.success) {
+        if (response.data.success && Array.isArray(response.data.bookings)) {
           setBookings(response.data.bookings);
           setError(null);
         }
       } catch (err) {
-        if (err.response && err.response.status === 404) {
-          setBookings([]); // No bookings found, which is not an error
-          setError(null);
-        } else {
-          setError('Failed to load bookings. Please try again later.');
-          console.error('Error fetching bookings:', err);
-        }
+        setError('Failed to load bookings. Please try again later.');
+        console.error('Error fetching bookings:', err);
       }
     };
     fetchBookings();
@@ -58,25 +53,54 @@ const BookingList = () => {
       }
     });
   };
-  
-  // Helper function to format 24-hour time to 12-hour AM/PM format
+
   const formatTime = (timeString) => {
     if (!timeString) return 'N/A';
-    const [hours, minutes] = timeString.split(':');
-    const h = parseInt(hours);
-    const m = parseInt(minutes);
-    const ampm = h >= 12 ? 'PM' : 'AM';
-    const formattedHours = h % 12 || 12; // Convert 0 to 12 for 12 AM
-    return `${String(formattedHours).padStart(2, '0')}:${String(m).padStart(2, '0')} ${ampm}`;
+    const parts = timeString.split(':');
+    if (parts.length < 2) return 'Invalid Time';
+    const hours = parseInt(parts[0], 10);
+    const minutes = parseInt(parts[1], 10);
+    if (isNaN(hours) || isNaN(minutes)) return 'Invalid Time';
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const formattedHours = hours % 12 || 12;
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    return `${formattedHours}:${formattedMinutes} ${ampm}`;
   };
 
   const handleShowDetails = (booking) => {
-    const seatsText = Array.isArray(booking.seats) && booking.seats.length > 0
-      ? booking.seats.map(seat => seat.replace('Row', '').replace('_Seat', '')).join(', ')
+    let seatsArray = [];
+    if (booking.seats) {
+      try {
+        seatsArray = typeof booking.seats === 'string' 
+            ? JSON.parse(booking.seats) 
+            : booking.seats;
+      } catch (e) {
+        console.error("Failed to parse seats JSON:", e);
+        seatsArray = [];
+      }
+    }
+
+    let packagesArray = [];
+    if (booking.packages) {
+        try {
+            packagesArray = typeof booking.packages === 'string'
+                ? JSON.parse(booking.packages)
+                : booking.packages;
+        } catch(e) {
+            console.error("Failed to parse packages JSON:", e);
+            packagesArray = [];
+        }
+    }
+    
+    if (!Array.isArray(seatsArray)) seatsArray = [];
+    if (!Array.isArray(packagesArray)) packagesArray = [];
+
+    const seatsText = seatsArray.length > 0
+      ? seatsArray.map(seat => seat.replace('Row', '').replace('_Seat', '')).join(', ')
       : 'No seats selected';
       
-    const packagesText = Array.isArray(booking.packages) && booking.packages.length > 0
-      ? booking.packages.map(p => `${p.name} (${p.count || 0})`).join('<br>')
+    const packagesText = packagesArray.length > 0
+      ? packagesArray.map(p => `${p.name} (${p.count || 'N/A'})`).join('<br>')
       : 'No packages selected';
 
     const formattedTime = formatTime(booking.show_time);
@@ -84,19 +108,18 @@ const BookingList = () => {
 
     Swal.fire({
       title: 'Booking Details',
+      icon: 'info',
       html: ` 
         <div style="text-align: left; padding-left: 20px;">
           <p><strong>Movie:</strong> ${booking.title || 'N/A'}</p>
           <p><strong>Date:</strong> ${formattedDate}</p>
           <p><strong>Time:</strong> ${formattedTime}</p>
           <p><strong>Seats:</strong> ${seatsText}</p>
-          <p><strong>Packages:</strong></p>
-          <div style="padding-left: 20px;">${packagesText}</div>
+          
           <p><strong>Total Price:</strong> LKR ${parseFloat(booking.total_price || 0).toFixed(2)}</p>
           <p><strong>Contact Phone:</strong> ${booking.phone || 'N/A'}</p>
         </div>
       `,
-      icon: 'info',
       confirmButtonText: 'Close'
     });
   };
@@ -116,7 +139,6 @@ const BookingList = () => {
             bookings.map((booking) => (
               <div key={booking.booking_id} className="booking-card">
                 <div className="film-image-container">
-                  {/* Correctly handle the image URL */}
                   <img 
                     src={booking.image_url ? `http://localhost:8080${booking.image_url}` : '/assets/images/default.jpg'} 
                     alt={booking.title || 'Movie Poster'}
@@ -129,16 +151,10 @@ const BookingList = () => {
                   <p className="film-time">{formatTime(booking.show_time)}</p>
                 </div>
                 <div className="button-group">
-                  <button 
-                    className="delete-btn" 
-                    onClick={() => handleDelete(booking.booking_id)}
-                  >
+                  <button className="delete-btn" onClick={() => handleDelete(booking.booking_id)}>
                     Cancel
                   </button>
-                  <button 
-                    className="update-btn"
-                    onClick={() => handleShowDetails(booking)}
-                  >
+                  <button className="update-btn" onClick={() => handleShowDetails(booking)}>
                     Show Details
                   </button>
                 </div>
