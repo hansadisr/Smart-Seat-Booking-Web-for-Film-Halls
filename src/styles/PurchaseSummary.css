@@ -97,7 +97,13 @@
   margin-bottom: 20px;
 }
 
-.ticket-item,
+.ticket-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0px;
+  padding: 5px 0;
+}
 .fee-item {
   display: flex;
   justify-content: space-between;
