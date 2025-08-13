@@ -13,7 +13,7 @@
 /* Film Cover Banner */
 .film-cover-banner {
   position: relative;
-  height: 200px;
+  height: 300px;
   background-size: cover;
   background-position: center;
 }
@@ -152,6 +152,7 @@
 .cast-name {
   font-weight: 500;
   font-size: 0.9rem;
+  color: #6F6C6C;
 }
 
 .cast-designation {
