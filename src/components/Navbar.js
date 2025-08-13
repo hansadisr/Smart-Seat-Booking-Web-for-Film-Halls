@@ -84,16 +84,6 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
               </a>
               <a
                 href="#"
-                className={getLinkClass('/location')}
-                onClick={handleNavigation('/location')}
-                onMouseEnter={() => setHoveredLink('/location')}
-                onMouseLeave={() => setHoveredLink(null)}
-              >
-                Location
-                {hoveredLink === '/location' && <span className="hover-tooltip"></span>}
-              </a>
-              <a
-                href="#"
                 className={getLinkClass('/bookingList')}
                 onClick={handleNavigation('/bookingList')}
                 onMouseEnter={() => setHoveredLink('/bookingList')}
@@ -101,6 +91,17 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
               >
                 Show Booking
                 {hoveredLink === '/bookingList' && <span className="hover-tooltip"></span>}
+              </a>
+
+              <a
+                href="#"
+                className={getLinkClass('/location')}
+                onClick={handleNavigation('/location')}
+                onMouseEnter={() => setHoveredLink('/location')}
+                onMouseLeave={() => setHoveredLink(null)}
+              >
+                Location
+                {hoveredLink === '/location' && <span className="hover-tooltip"></span>}
               </a>
             </div>
           )}
