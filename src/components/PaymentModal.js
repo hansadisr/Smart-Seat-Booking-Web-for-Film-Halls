@@ -121,21 +121,6 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData, onB
 
           <div className="form-group">
             <label className="form-label">
-              Cardholder Name <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              name="cardholderName"
-              value={cardInfo.cardholderName}
-              onChange={handleInputChange}
-              className="form-input"
-              placeholder="John Doe"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">
               Security Code (CVV) <span className="required">*</span>
             </label>
             <div className="security-code-group">
