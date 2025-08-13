@@ -92,6 +92,16 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
                 Location
                 {hoveredLink === '/location' && <span className="hover-tooltip"></span>}
               </a>
+              <a
+                href="#"
+                className={getLinkClass('/bookingList')}
+                onClick={handleNavigation('/bookingList')}
+                onMouseEnter={() => setHoveredLink('/bookingList')}
+                onMouseLeave={() => setHoveredLink(null)}
+              >
+                Show Booking
+                {hoveredLink === '/bookingList' && <span className="hover-tooltip"></span>}
+              </a>
             </div>
           )}
         </div>
@@ -99,23 +109,20 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
         {/* Conditionally render the authentication buttons */}
         {isLoggedIn ? (
           <div className="auth-buttons">
-            <button
-              className="signin-btn"
-              onClick={() => {
-                navigate('/bookingList');
-              }}
-            >
-              Show Booking
-            </button>
-            <button
-              className="logout-btn"
-              onClick={() => {
-                logout();
-                navigate('/');
-              }}
-            >
-              Logout
-            </button>
+            <div className="user-actions">
+              <button
+                className="logout-btn"
+                onClick={() => {
+                  logout();
+                  navigate('/');
+                }}
+              >
+                Logout
+              </button>
+              <div className="profile-icon" onClick={() => navigate('/profile')}>
+                <FaUserCircle size={30} style={{ cursor: 'pointer', color: '#fff' }} />
+              </div>
+            </div>
           </div>
         ) : (
           <button
@@ -124,11 +131,6 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
           >
             Sign in
           </button>
-        )}
-        {isLoggedIn && (
-          <div className="profile-icon" onClick={() => navigate('/profile')}>
-            <FaUserCircle size={30} style={{ cursor: 'pointer', color: '#fff' }} />
-          </div>
         )}
       </div>
     </nav>
