@@ -56,7 +56,7 @@ const Movie = () => {
 
               <div className="movie-details">
                 <h1 className="movie-title">{movie.title}</h1>
-                <span className="language">English</span>
+                <span className="language">{movie.language}</span>
                 <div className="genre-tags">
                   {movie.genre.split(',').map((g, idx) => (
                     <span key={idx} className="genre-tag">{g.trim()}</span>
