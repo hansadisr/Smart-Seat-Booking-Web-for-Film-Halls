@@ -4,14 +4,15 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import '../styles/PaymentModal.css';
 
-const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData }) => {
-  const [paymentData, setPaymentData] = useState({
+const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData, onBookingSuccess }) => {
+  const [cardInfo, setCardInfo] = useState({
     cardNumber: '',
     expiryMonth: '',
     expiryYear: '',
     cardholderName: '',
     securityCode: ''
   });
+  const [isPaying, setIsPaying] = useState(false);
   const navigate = useNavigate();
   const userId = localStorage.getItem('userId');
 
@@ -19,65 +20,51 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData }) =
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setPaymentData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const formatCardNumber = (value) => {
-    const digits = value.replace(/\D/g, '');
-    return digits.replace(/(\d{4})(?=\d)/g, '$1 ');
-  };
-
-  const handleCardNumberChange = (e) => {
-    const formatted = formatCardNumber(e.target.value);
-    setPaymentData(prev => ({
-      ...prev,
-      cardNumber: formatted
-    }));
+    // Format card number with spaces
+    if (name === 'cardNumber') {
+        const formattedValue = value.replace(/\s/g, '').replace(/(\d{4})/g, '$1 ').trim();
+        setCardInfo(prev => ({ ...prev, [name]: formattedValue }));
+    } else {
+        setCardInfo(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handlePayment = async (e) => {
     e.preventDefault();
-    
-    if (!paymentData.cardNumber || !paymentData.expiryMonth || 
-        !paymentData.expiryYear || !paymentData.cardholderName || 
-        !paymentData.securityCode) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Please fill in all required fields',
-      });
-      return;
-    }
+    setIsPaying(true);
 
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/bookings/create', {
-        user_id: userId,
+      const apiPayload = {
+        user_id: parseInt(userId),
         show_id: bookingData.showId,
         seats: bookingData.selectedSeats,
         packages: bookingData.packages,
         total_price: parseFloat(totalAmount),
-        phone: userData.mobileNumber
-      });
+        phone: userData.mobileNumber,
+      };
+
+      const response = await axios.post('http://localhost:8080/api/v1/bookings/create', apiPayload);
+
       if (response.data.success) {
         Swal.fire({
           icon: 'success',
           title: 'Success!',
-          text: 'Payment processed and booking created successfully!',
-          confirmButtonText: 'OK'
+          text: 'Your booking is confirmed!',
+          confirmButtonText: 'View My Bookings'
         }).then(() => {
-          onClose();
+          if (onBookingSuccess) onBookingSuccess();
+          onClose(); // Close this payment modal
           navigate('/bookingList');
         });
       }
     } catch (error) {
       Swal.fire({
         icon: 'error',
-        title: 'Error',
-        text: 'Failed to create booking',
+        title: 'Booking Failed',
+        text: error.response?.data?.message || 'An unexpected error occurred.',
       });
+    } finally {
+      setIsPaying(false);
     }
   };
 
@@ -85,26 +72,19 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData }) =
     <div className="payment-modal-overlay" onClick={onClose}>
       <div className="payment-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="payment-header">
-          <h2 className="payment-title">Total Amount : {totalAmount} LKR</h2>
+          <h2 className="payment-title">Total Amount: LKR {totalAmount}</h2>
         </div>
         
+        {/* THIS IS THE FORM THAT WAS MISSING */}
         <form onSubmit={handlePayment} className="payment-form">
           <div className="form-group">
-            <label className="form-label">
-              Card Number <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              name="cardNumber"
-              value={paymentData.cardNumber}
-              onChange={handleCardNumberChange}
-              className="form-input card-input"
-              placeholder="1234 5678 9012 3456"
-              maxLength="19"
-              required
-            />
+            <label className="form-label">Card Number</label>
+            <input type="text" name="cardNumber" value={cardInfo.cardNumber} onChange={handleInputChange} placeholder="1234 5678 9012 3456" maxLength="19" required className="form-input" />
           </div>
-
+          <div className="form-group">
+            <label className="form-label">Cardholder Name</label>
+            <input type="text" name="cardholderName" value={cardInfo.cardholderName} onChange={handleInputChange} placeholder="John Doe" required className="form-input" />
+          </div>
           <div className="form-row">
             <div className="form-group half-width">
               <label className="form-label">
@@ -113,7 +93,7 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData }) =
               <input
                 type="text"
                 name="expiryMonth"
-                value={paymentData.expiryMonth}
+                value={cardInfo.expiryMonth}
                 onChange={handleInputChange}
                 className="form-input"
                 placeholder="MM"
@@ -129,7 +109,7 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData }) =
               <input
                 type="text"
                 name="expiryYear"
-                value={paymentData.expiryYear}
+                value={cardInfo.expiryYear}
                 onChange={handleInputChange}
                 className="form-input"
                 placeholder="YY"
@@ -146,7 +126,7 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData }) =
             <input
               type="text"
               name="cardholderName"
-              value={paymentData.cardholderName}
+              value={cardInfo.cardholderName}
               onChange={handleInputChange}
               className="form-input"
               placeholder="John Doe"
@@ -156,13 +136,13 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData }) =
 
           <div className="form-group">
             <label className="form-label">
-              Security Code <span className="required">*</span>
+              Security Code (CVV) <span className="required">*</span>
             </label>
             <div className="security-code-group">
               <input
                 type="text"
                 name="securityCode"
-                value={paymentData.securityCode}
+                value={cardInfo.securityCode}
                 onChange={handleInputChange}
                 className="form-input security-input"
                 placeholder="123"
@@ -172,9 +152,8 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData }) =
               <span className="security-hint">3 digits on back of your card</span>
             </div>
           </div>
-
-          <button type="submit" className="pay-button">
-            Pay
+          <button type="submit" className="pay-button" disabled={isPaying}>
+            {isPaying ? 'Processing...' : `Pay LKR ${totalAmount}`}
           </button>
         </form>
       </div>
