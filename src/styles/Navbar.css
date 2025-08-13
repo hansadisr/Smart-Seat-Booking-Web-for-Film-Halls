@@ -2,6 +2,9 @@
   background-color: #333545;
   padding: 15px 0;
 }
+.highlight1 {
+  color: #FF0000;
+}
 
 .nav-container {
   max-width: 1200px;
@@ -118,7 +121,7 @@
 }
 
 .logout-btn {
-  background-color: #ff0000;
+  background-color: #FF0000;
   color: white;
   border: none;
   padding: 8px 20px;
