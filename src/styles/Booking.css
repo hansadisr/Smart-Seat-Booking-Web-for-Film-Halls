@@ -28,7 +28,7 @@
   left: 15px;
   transform: none;
   display: flex;
-  align-items: flex-end;
+  align-items: center; 
   justify-content: flex-start;
   gap: 15px;
   text-align: left;
@@ -60,6 +60,7 @@
 .movie-tags {
   display: flex;
   gap: 6px;
+    margin: 5px 0;
 }
 
 .tag {
@@ -120,6 +121,7 @@
 .showtime-btn .time {
   font-weight: bold;
   margin-bottom: 2px;
+  color: #6F5050;
 }
 
 .showtime-btn .session {
@@ -130,11 +132,11 @@
 
 .showtime-btn.selected {
   background-color: #D49696;
-  color: white;
+  color: #EAD5D5;
 }
 
 .showtime-btn.selected .session {
-  color: #ffffff;
+  color: #EAD5D5;
   font-weight: bold;
 }
 
@@ -213,14 +215,14 @@
 }
 
 .box-seat.selected {
-  background-color: #4CAF50;
+  background-color: #41AF3B;
   color: white;
   border-color: #6F6C6C;
 }
 
 .box-seat.booked {
-  background-color: #e8e8e8;
-  color: #999;
+  background-color: #c5c3c3;
+  color: #504646;
   cursor: not-allowed;
   border-color: #7D7A7A;
 }
@@ -237,14 +239,14 @@
 }
 
 .odc-seat.selected {
-  background-color: #4CAF50;
+  background-color: #41AF3B;
   color: white;
-  border-color: #4CAF50;
+  border-color: #6F6C6C;
 }
 
 .odc-seat.booked {
-  background-color: #e8e8e8;
-  color: #999;
+  background-color: #c5c3c3;
+  color: #504646;
   cursor: not-allowed;
   border-color: #7D7A7A;
 }
@@ -307,10 +309,12 @@
 .quantity-controls {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   border: 2px solid #766161;
   border-radius: 20px;
-  min-width: 30px;
+  min-width: 100px;
+  min-height: 30px;
   padding: 0 10px ;
 }
 
@@ -318,7 +322,7 @@
   width: 30px;
   height: 30px;
   border: none;
-  background-color: white;
+  background-color: transparent;
   cursor: pointer;
   /* border-radius: 50%; */
   display: flex;
