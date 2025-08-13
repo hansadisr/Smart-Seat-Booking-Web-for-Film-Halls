@@ -62,7 +62,12 @@ const Booking = () => {
                 const response = await axios.get(`${API_BASE_URL}/api/v1/shows/for_movie`, {
                     params: { movie_id: movieId, date: formattedDate }
                 });
-                setAvailableTimes(response.data.success ? response.data.shows : []);
+                const shows = response.data.success ? response.data.shows : [];
+                setAvailableTimes(shows);
+                if (shows.length > 0) {
+                    setSelectedTime(shows[0].show_time.slice(0, 5));
+                    setSelectedShowId(shows[0].show_id);
+                }
             } catch (error) {
                 console.error('Error fetching shows:', error);
                 setAvailableTimes([]);
@@ -71,8 +76,6 @@ const Booking = () => {
         if (movieId) {
             fetchShows();
         }
-        setSelectedTime(null);
-        setSelectedShowId(null);
         setSelectedSeats([]);
         setBookedSeats([]);
     }, [selectedDate, movieId, API_BASE_URL]);
