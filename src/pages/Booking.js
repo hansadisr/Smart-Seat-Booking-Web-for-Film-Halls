@@ -176,6 +176,13 @@ const Booking = () => {
 
     if (!movie) return <div>Loading movie details...</div>;
 
+    const formattedDate = new Date(movie.release_date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'UTC',
+    });
+
     const bookingData = {
         selectedSeats,
         time: selectedTime,
@@ -198,6 +205,13 @@ const Booking = () => {
                         <img className="film-poster1" src={`${API_BASE_URL}${movie.image_url}`} alt="Poster" />
                         <div className="movie-info">
                             <h1 className="movie-title1">{movie.title}</h1>
+                                <span className="movie-subtitle">{movie.language}</span>
+                                <div className="movie-tags">
+                                {movie.genre && movie.genre.split(',').map((g, idx) => (
+                                    <span key={idx} className="tag">{g.trim()}</span>
+                                ))}
+                                </div>
+                                <div className="movie-date">{formattedDate}</div>
                         </div>
                     </div>
                 </div>
@@ -239,9 +253,9 @@ const Booking = () => {
                                             <span className="quantity">{pkg.count}</span>
                                         ) : (
                                             <>
-                                                <button onClick={() => handlePackageChange(pkg.name, -1)} disabled={pkg.count === 0}>-</button>
+                                                <button className="quantity-btn minus" onClick={() => handlePackageChange(pkg.name, -1)} disabled={pkg.count === 0}>-</button>
                                                 <span className="quantity">{pkg.count}</span>
-                                                <button onClick={() => handlePackageChange(pkg.name, 1)} disabled={packages.reduce((sum, p) => p.name.startsWith('ODC') ? sum + p.count : sum, 0) >= odcSeatCount}>+</button>
+                                                <button className="quantity-btn plus" onClick={() => handlePackageChange(pkg.name, 1)} disabled={packages.reduce((sum, p) => p.name.startsWith('ODC') ? sum + p.count : sum, 0) >= odcSeatCount}>+</button>
                                             </>
                                         )}
                                     </div>
