@@ -18,6 +18,17 @@
   background-position: center;
 }
 
+.film-cover-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
+
 .film-cover-overlay {
   position: absolute;
   bottom: -85px;
@@ -26,6 +37,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  z-index: 1;
 }
 
 .film-info-container {
@@ -86,15 +98,15 @@
 
 .release-date {
   font-size: 0.9rem;
-  color: #6F6C6C;
-  /* text-shadow: -1px -1px 0 #6F6C6C, 1px -1px 0 #6F6C6C, -1px 1px 0 #6F6C6C, 1px 1px 0 #6F6C6C; */
+  color: #ffffff;
+  text-shadow: -1px -1px 0 #6F6C6C, 1px -1px 0 #6F6C6C, -1px 1px 0 #6F6C6C, 1px 1px 0 #6F6C6C;
 }
 
 .movie-description {
   margin-top: 10px;
   font-size: 0.95rem;
   max-width: 500px;
-  color: #6F6C6C;
+  color: #422929;
   /* text-shadow: -1px -1px 0 #6F6C6C, 1px -1px 0 #6F6C6C, -1px 1px 0 #6F6C6C, 1px 1px 0 #6F6C6C; */
 }
 
