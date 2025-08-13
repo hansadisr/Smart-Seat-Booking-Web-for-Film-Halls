@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Navbar.css';
 import { images } from '../constants/theme';
-import { FaUserCircle } from 'react-icons/fa'; // Profile icon
+import { FaUserCircle } from 'react-icons/fa';
 
 const Navbar = ({ onSignInClick, isLoginPage = false }) => {
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
     <nav className="navbar">
       <div className="nav-container">
         <div className="nav-brand">
-          <h2>ReelVista</h2>
+          <h2><span>Reel </span><span className="highlight1">Vista</span></h2>
         </div>
 
         <div className="nav-center">
