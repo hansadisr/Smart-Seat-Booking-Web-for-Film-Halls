@@ -143,8 +143,9 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
               placeholder="Name"
               value={formData.name}
               onChange={handleInputChange}
-              className="form-input"
+              className="form-input1"
               required
+              readOnly
             />
           </div>
 
@@ -167,8 +168,9 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
               placeholder="Email"
               value={formData.email}
               onChange={handleInputChange}
-              className="form-input"
+              className="form-input1"
               required
+              readOnly
             />
           </div>
 
