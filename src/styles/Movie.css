@@ -7,7 +7,7 @@
   margin: auto;
   padding: 20px;
   position: relative;
-  background-color: #f1f0f0;
+  background-color: #fff;
 }
 
 /* Film Cover Banner */
@@ -126,7 +126,7 @@
 
 /* Cast Section */
 .cast-section {
-  background-color: #f1f0f0;
+  background-color: #fff;
   padding: 25px;
   margin-top: 100px;
   margin-left: 200px;
