@@ -4,56 +4,24 @@ import { images } from "../constants/theme";
 
 const MovieGrid = () => {
   const movies = [
-    {
-      id: 1,
-      title: "The Shawshank Redemption",
-      image: images.Film3
-    },
-    {
-      id: 2,
-      title: "The Godfather",
-      image: "https://image.tmdb.org/t/p/w300/3bhkrj58Vtu7enYsRolD1fZdja1.jpg"
-    },
-    {
-      id: 3,
-      title: "Pulp Fiction",
-      image: "https://image.tmdb.org/t/p/w300/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg"
-    },
-    {
-      id: 4,
-      title: "Inception",
-      image: "https://image.tmdb.org/t/p/w300/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg"
-    },
-    {
-      id: 5,
-      title: "The Dark Knight",
-      image: "https://image.tmdb.org/t/p/w300/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
-    },
-    {
-      id: 6,
-      title: "Fight Club",
-      image: "https://image.tmdb.org/t/p/w300/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg"
-    },
-    {
-      id: 7,
-      title: "Forrest Gump",
-      image: images.Film1
-    },
-    {
-      id: 8,
-      title: "The Matrix",
-      image: images.Film2
-    },
-    {
-      id: 9,
-      title: "Interstellar",
-      image: "https://image.tmdb.org/t/p/w300/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
-    }
+    { id: 1, title: "Film 1", image: images.Film1 },
+    { id: 2, title: "Cover 2", image: images.cover2 },
+    { id: 3, title: "Film 2", image: images.Film2 },
+    { id: 4, title: "Cover 15", image: images.cover15 },
+    { id: 5, title: "Film 3", image: images.Film3 },
+    { id: 6, title: "Cover 13", image: images.cover13 },
+    { id: 7, title: "Film 4", image: images.Film4avif },
+    { id: 8, title: "Cover 14", image: images.cover14 },
+    { id: 9, title: "Film 5", image: images.Film5 },
+    { id: 10, title: "Cover 1", image: images.cover1 },
+    { id: 11, title: "Cover 3", image: images.cover3 },
+    { id: 12, title: "Cover 4", image: images.cover4 },
+    { id: 13, title: "Cover 5", image: images.cover5 },
+    { id: 14, title: "Cover 11", image: images.cover11 },
+    { id: 15, title: "Cover 12", image: images.cover12 },
   ];
-
-  // Duplicate list for infinite effect
+  
   const movieList = [...movies, ...movies];
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const trackRef = useRef(null);
 
@@ -65,8 +33,8 @@ const MovieGrid = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    if (currentIndex >= movies.length) {
+useEffect(() => {
+    if (currentIndex >= movies.length * 2) {
       setTimeout(() => {
         setCurrentIndex(0);
         trackRef.current.style.transition = "none";
