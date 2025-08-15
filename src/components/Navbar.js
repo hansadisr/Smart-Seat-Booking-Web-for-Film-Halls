@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Navbar.css';
-import { colors, images } from '../constants/theme';
-import { FaUserCircle } from 'react-icons/fa'; // Profile icon
-
+import { images } from '../constants/theme';
+import { FaUserCircle } from 'react-icons/fa';
 
 const Navbar = ({ onSignInClick, isLoginPage = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isLoggedIn, logout } = useAuth();
   const [hoveredLink, setHoveredLink] = useState(null);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleSignInClick = () => {
     if (onSignInClick) {
@@ -38,21 +36,17 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
     const query = e.target.value;
     setSearchQuery(query);
     if (query) {
-      setSearchParams({ search: query });
-    } else {
-      setSearchParams({});
+      // Handle search query
     }
   };
-  
-
 
   return (
     <nav className="navbar">
       <div className="nav-container">
         <div className="nav-brand">
-          <h2>ReelVista</h2>
+          <h2><span>Reel </span><span className="highlight1">Vista</span></h2>
         </div>
-        
+
         <div className="nav-center">
           <div className="search-container">
             <img src={images.searchBlack} alt="Search Icon" className="search-icon" />
@@ -65,79 +59,82 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
             />
           </div>
           
-          <div className="nav-links">
-            <a
-              href="#"
-              className={getLinkClass('/')}
-              onClick={handleNavigation('/')}
-              onMouseEnter={() => setHoveredLink('/')}
-              onMouseLeave={() => setHoveredLink(null)}
-            >
-              Home
-              {hoveredLink === '/' && <span className="hover-tooltip"></span>}
-            </a>
-            <a
-              href="#"
-              className={getLinkClass('/movies')}
-              onClick={handleNavigation('/movies')}
-              onMouseEnter={() => setHoveredLink('/movies')}
-              onMouseLeave={() => setHoveredLink(null)}
-            >
-              Movies
-              {hoveredLink === '/movies' && <span className="hover-tooltip"></span>}
-            </a>
-            <a
-              href="#"
-              className={getLinkClass('/location')}
-              onClick={handleNavigation('/location')}
-              onMouseEnter={() => setHoveredLink('/location')}
-              onMouseLeave={() => setHoveredLink(null)}
-            >
-              Location
-              {hoveredLink === '/location' && <span className="hover-tooltip"></span>}
-            </a>
-          </div>
+          {/* Conditionally render the nav-links only if the user is logged in */}
+          {isLoggedIn && (
+            <div className="nav-links">
+              <a
+                href="#"
+                className={getLinkClass('/')}
+                onClick={handleNavigation('/')}
+                onMouseEnter={() => setHoveredLink('/')}
+                onMouseLeave={() => setHoveredLink(null)}
+              >
+                Home
+                {hoveredLink === '/' && <span className="hover-tooltip"></span>}
+              </a>
+              <a
+                href="#"
+                className={getLinkClass('/movies')}
+                onClick={handleNavigation('/movies')}
+                onMouseEnter={() => setHoveredLink('/movies')}
+                onMouseLeave={() => setHoveredLink(null)}
+              >
+                Movies
+                {hoveredLink === '/movies' && <span className="hover-tooltip"></span>}
+              </a>
+              <a
+                href="#"
+                className={getLinkClass('/bookingList')}
+                onClick={handleNavigation('/bookingList')}
+                onMouseEnter={() => setHoveredLink('/bookingList')}
+                onMouseLeave={() => setHoveredLink(null)}
+              >
+                Show Booking
+                {hoveredLink === '/bookingList' && <span className="hover-tooltip"></span>}
+              </a>
+
+              <a
+                href="#"
+                className={getLinkClass('/location')}
+                onClick={handleNavigation('/location')}
+                onMouseEnter={() => setHoveredLink('/location')}
+                onMouseLeave={() => setHoveredLink(null)}
+              >
+                Location
+                {hoveredLink === '/location' && <span className="hover-tooltip"></span>}
+              </a>
+            </div>
+          )}
         </div>
-        
+
+        {/* Conditionally render the authentication buttons */}
         {isLoggedIn ? (
           <div className="auth-buttons">
-            <button 
-              className="signin-btn"
-              onClick={() => {
-                navigate('/bookingList');
-              }}
-            >
-              Show Booking
-            </button>
-            <button 
-              className="logout-btn"
-              onClick={() => {
-                logout();
-                navigate('/login');
-              }}
-            >
-              Logout
-            </button>
+            <div className="user-actions">
+              <button
+                className="logout-btn"
+                onClick={() => {
+                  logout();
+                  navigate('/');
+                }}
+              >
+                Logout
+              </button>
+              <div className="profile-icon" onClick={() => navigate('/profile')}>
+                <FaUserCircle size={30} style={{ cursor: 'pointer', color: '#fff' }} />
+              </div>
+            </div>
           </div>
         ) : (
-          <button 
+          <button
             className={`signin-btn ${isLoginPage ? 'active' : ''}`}
             onClick={handleSignInClick}
           >
             Sign in
           </button>
         )}
-         {isLoggedIn && (
-  <div className="profile-icon" onClick={() => navigate('/profile')}>
-    <FaUserCircle size={30} style={{ cursor: 'pointer', color: '#fff' }} />
-  </div>
-)}
-
       </div>
-     
     </nav>
-    // Inside return(), in the navbar right side (auth-buttons area)
-
   );
 };
 

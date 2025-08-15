@@ -45,7 +45,7 @@ const Movies = () => {
           <div className="movie-image-container">
             {/* Update Image Source */}
             <img 
-              src={`http://localhost:8080${movie.image_url}`} 
+              src={`http://localhost:8080${movie.cover_image}`} 
               alt={movie.title} 
               className="movie-image"
             />
@@ -53,7 +53,7 @@ const Movies = () => {
               <div className="movie-details1">
                 <h4>{movie.title}</h4>
                 <div className="movie-info-row">
-                  <span className="movie-language">English</span> {/* Assume or add language field if needed */}
+                  <span className="movie-language">{movie.language}</span>
                   <span className="movie-duration">{movie.duration}</span>
                 </div>
               </div>

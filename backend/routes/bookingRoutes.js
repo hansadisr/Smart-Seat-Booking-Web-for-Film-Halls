@@ -1,7 +1,11 @@
 const express = require('express');
-const { createBooking, getUserBookings, deleteBooking } = require('../controllers/bookingController');
-
 const router = express.Router();
+
+const { 
+  createBooking, 
+  getUserBookings, 
+  deleteBooking
+} = require('../controllers/bookingController');
 
 router.post('/create', createBooking);
 router.get('/user/:user_id', getUserBookings);

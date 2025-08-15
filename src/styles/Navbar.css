@@ -2,6 +2,9 @@
   background-color: #333545;
   padding: 15px 0;
 }
+.highlight1 {
+  color: #FF0000;
+}
 
 .nav-container {
   max-width: 1200px;
@@ -44,7 +47,7 @@
 
 .search-input {
   width: 300px;
-  padding: 10px 15px 10px 35px; 
+  padding: 10px 15px 10px 35px;
   background-color: #D9D9D9;
   border: 1px solid #555;
   border-radius: 5px;
@@ -106,15 +109,22 @@
 
 .auth-buttons {
   display: flex;
+  flex-direction: column;
   gap: 10px;
   align-items: center;
 }
 
+.user-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
 .logout-btn {
-  background-color: #ff0000;
+  background-color: #FF0000;
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding: 8px 20px;
   border-radius: 15px;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -124,10 +134,9 @@
 .logout-btn:hover {
   background-color: #cc0000;
 }
- .profile-icon {
+.profile-icon {
   display: flex;
   align-items: center;
-  margin-left: 15px;
 }
 
 .profile-icon:hover {

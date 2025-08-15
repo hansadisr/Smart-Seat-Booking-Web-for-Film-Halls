@@ -7,15 +7,26 @@
   margin: auto;
   padding: 20px;
   position: relative;
-  background-color: #f1f0f0;
+  background-color: #fff;
 }
 
 /* Film Cover Banner */
 .film-cover-banner {
   position: relative;
-  height: 200px;
+  height: 300px;
   background-size: cover;
   background-position: center;
+}
+
+.film-cover-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 0;
 }
 
 .film-cover-overlay {
@@ -26,6 +37,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  z-index: 1;
 }
 
 .film-info-container {
@@ -86,15 +98,15 @@
 
 .release-date {
   font-size: 0.9rem;
-  color: #6F6C6C;
-  /* text-shadow: -1px -1px 0 #6F6C6C, 1px -1px 0 #6F6C6C, -1px 1px 0 #6F6C6C, 1px 1px 0 #6F6C6C; */
+  color: #ffffff;
+  text-shadow: -1px -1px 0 #6F6C6C, 1px -1px 0 #6F6C6C, -1px 1px 0 #6F6C6C, 1px 1px 0 #6F6C6C;
 }
 
 .movie-description {
   margin-top: 10px;
   font-size: 0.95rem;
   max-width: 500px;
-  color: #6F6C6C;
+  color: #422929;
   /* text-shadow: -1px -1px 0 #6F6C6C, 1px -1px 0 #6F6C6C, -1px 1px 0 #6F6C6C, 1px 1px 0 #6F6C6C; */
 }
 
@@ -114,7 +126,7 @@
 
 /* Cast Section */
 .cast-section {
-  background-color: #f1f0f0;
+  background-color: #fff;
   padding: 25px;
   margin-top: 100px;
   margin-left: 200px;
@@ -152,6 +164,7 @@
 .cast-name {
   font-weight: 500;
   font-size: 0.9rem;
+  color: #6F6C6C;
 }
 
 .cast-designation {

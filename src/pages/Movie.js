@@ -32,6 +32,13 @@ const Movie = () => {
 
   if (!movie) return <div>Loading...</div>;
 
+  const formattedDate = new Date(movie.release_date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+
   return (
     <div className="home-page">
       <Navbar />
@@ -49,13 +56,13 @@ const Movie = () => {
 
               <div className="movie-details">
                 <h1 className="movie-title">{movie.title}</h1>
-                <span className="language">English</span>
+                <span className="language">{movie.language}</span>
                 <div className="genre-tags">
                   {movie.genre.split(',').map((g, idx) => (
                     <span key={idx} className="genre-tag">{g.trim()}</span>
                   ))}
                 </div>
-                <div className="release-date">{movie.release_date}</div>
+                <div className="release-date">{formattedDate}</div>
                 <p className="movie-description">{movie.description}</p>
               </div>
 

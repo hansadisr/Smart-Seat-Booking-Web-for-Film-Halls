@@ -100,13 +100,17 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
               };
 
               const seatsList = getSeatNumbers(pkg.name === 'Box');
+              
+              // --- THIS IS THE CORRECTED LOGIC ---
+              const unitPrice = parseFloat(pkg.price.replace('LKR ', '').replace(',', ''));
+              const lineItemTotal = unitPrice * pkg.count;
 
               return (
                 <div key={index} className="ticket-item">
                   <span className="ticket-type">
                     {pkg.name} - {seatsList} ({pkg.count} Ticket{pkg.count > 1 ? 's' : ''})
                   </span>
-                  <span className="ticket-price">{pkg.price}</span>
+                  <span className="ticket-price">LKR {lineItemTotal.toFixed(2)}</span>
                 </div>
               );
             })}
@@ -139,8 +143,9 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
               placeholder="Name"
               value={formData.name}
               onChange={handleInputChange}
-              className="form-input"
+              className="form-input1"
               required
+              readOnly
             />
           </div>
 
@@ -163,8 +168,9 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
               placeholder="Email"
               value={formData.email}
               onChange={handleInputChange}
-              className="form-input"
+              className="form-input1"
               required
+              readOnly
             />
           </div>
 

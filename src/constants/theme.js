@@ -5,7 +5,7 @@ export const colors = {
   background: "#FFFFFF",
   red: "#CF6E6E",
   blue: "#1A67C6",
-  grey : "#776B6B"
+  grey: "#776B6B"
 };
 
 export const images = {
@@ -23,14 +23,18 @@ export const images = {
   hall: require("../assets/images/hall.jpg"),
   Film1: require("../assets/images/Film1.jpg"),
   Film2: require("../assets/images/Film2.jpg"),
-  Film3: require("../assets/images/Film3.webp"),
-  Film4: require("../assets/images/Film4.avif"),
-  cover1: require("../assets/images/cover1.avif"),
+  Film3: require("../assets/images/Film3.jpg"),
+  Film4: require("../assets/images/Film4.jpg"),
+  Film4avif: require("../assets/images/Film4.avif"),
+  Film5: require("../assets/images/Film5.webp"),
+  cover1: require("../assets/images/cover1.jpg"),
   cover2: require("../assets/images/cover2.jpeg"),
-  cast1: require("../assets/images/cast1.jpeg"),
-  cast2: require("../assets/images/cast2.jpeg"),
-  cast3: require("../assets/images/cast3.jpeg"),
-  cast4: require("../assets/images/cast4.jpeg"),
-  cast5: require("../assets/images/cast5.jpeg"),
-  cast6: require("../assets/images/cast6.jpeg"),
+  cover3: require("../assets/images/cover3.webp"),
+  cover4: require("../assets/images/cover4.avif"),
+  cover5: require("../assets/images/cover5.jpg"),
+  cover11: require("../assets/images/cover11.avif"),
+  cover12: require("../assets/images/cover12.avif"),
+  cover13: require("../assets/images/cover13.jpg"),
+  cover14: require("../assets/images/cover14.jpg"),
+  cover15: require("../assets/images/cover15.jpg"),
 };

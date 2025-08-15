@@ -11,8 +11,8 @@ const Footer = () => {
         <div className="footer-title-line">
           <span className="line"></span>
           <div className="footer-brand">
-            <span>Book </span>
-            <span className="highlight">My</span>
+            <span>Reel </span>
+            <span className="highlight">Vista</span>
             <span> Show</span>
           </div>
           <span className="line"></span>
