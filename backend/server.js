@@ -20,7 +20,7 @@ app.use(morgan('dev')); // To log requests for development
 // Serve static files (images)
 app.use('/assets/images', express.static(path.join(__dirname, 'assets', 'images')));
 
-// Routes
+// Routes (define the endpoints)
 app.use('/api/v1/users', require("./routes/userRoutes"));
 app.use('/api/v1/movies', require("./routes/movieRoutes"));
 app.use('/api/v1/shows', require("./routes/showRoutes"));

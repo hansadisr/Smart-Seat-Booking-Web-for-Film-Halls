@@ -40,7 +40,8 @@ const Booking = () => {
     const [showPurchaseSummary, setShowPurchaseSummary] = useState(false);
 
     const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
-
+    
+    //get movie details and store them in movie.When the component loads it calls backend
     useEffect(() => {
         const fetchMovie = async () => {
             try {
@@ -54,7 +55,8 @@ const Booking = () => {
         };
         fetchMovie();
     }, [movieId, API_BASE_URL]);
-
+    
+    // fetches the showtimes for a selected movie date and movie and update availabletimes
     useEffect(() => {
         const fetchShows = async () => {
             const formattedDate = selectedDate.toISOString().split('T')[0];
@@ -79,7 +81,7 @@ const Booking = () => {
         setSelectedSeats([]);
         setBookedSeats([]);
     }, [selectedDate, movieId, API_BASE_URL]);
-
+    // check seats are already book or not
     const fetchBookedSeats = useCallback(async () => {
         if (!selectedShowId) return;
         setIsLoading(true);
@@ -120,7 +122,7 @@ const Booking = () => {
         setSelectedTime(time);
         setSelectedShowId(showId);
     };
-
+    // seat selection
     const toggleSeat = (seatId) => {
         if (bookedSeats.includes(seatId)) return;
         setSelectedSeats(prev =>
@@ -130,6 +132,7 @@ const Booking = () => {
         );
     };
     
+    //when the saets are selected, the package counts are adjusted 
     const handlePackageChange = (name, increment) => {
         const odcSeatCount = selectedSeats.filter(s => !s.startsWith('RowA_') && !s.startsWith('RowB_')).length;
         setPackages(prev => {

@@ -16,7 +16,7 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
-
+  // login
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
@@ -83,11 +83,12 @@ const LoginPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
+                
                 <img
                   src={showPassword ? images.eye : images.eyeclose}
                   alt={showPassword ? 'Hide password' : 'Show password'}
                   className="password-toggle-icon"
-                  onClick={togglePasswordVisibility}
+                  onClick={togglePasswordVisibility} //toggle password accessibility
                 />
               </div>
             </div>

@@ -9,7 +9,7 @@ const BookingList = () => {
   const [bookings, setBookings] = useState([]);
   const [error, setError] = useState(null);
   const userId = localStorage.getItem('userId');
-
+  // if user is not log in then show the message to log
   useEffect(() => {
     const fetchBookings = async () => {
       if (!userId) {
@@ -29,7 +29,7 @@ const BookingList = () => {
     };
     fetchBookings();
   }, [userId]);
-
+   // to delete the booking. when click the delete, send the request to the backend and remove it
   const handleDelete = async (bookingId) => {
     Swal.fire({
       title: 'Are you sure?',
@@ -53,7 +53,7 @@ const BookingList = () => {
       }
     });
   };
-
+  // convert time into read time 
   const formatTime = (timeString) => {
     if (!timeString) return 'N/A';
     const parts = timeString.split(':');
@@ -66,7 +66,7 @@ const BookingList = () => {
     const formattedMinutes = String(minutes).padStart(2, '0');
     return `${formattedHours}:${formattedMinutes} ${ampm}`;
   };
-
+  // read seats and packages from booking
   const handleShowDetails = (booking) => {
     let seatsArray = [];
     if (booking.seats) {
@@ -105,7 +105,7 @@ const BookingList = () => {
 
     const formattedTime = formatTime(booking.show_time);
     const formattedDate = booking.show_date ? new Date(booking.show_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A';
-
+    //shows popup with movie, data, time, seats, price and phone 
     Swal.fire({
       title: 'Booking Details',
       icon: 'info',
@@ -123,7 +123,7 @@ const BookingList = () => {
       confirmButtonText: 'Close'
     });
   };
-
+  // no bookings -> show message, else show the details
   return (
     <div className="bookings-page">
       <Navbar />
