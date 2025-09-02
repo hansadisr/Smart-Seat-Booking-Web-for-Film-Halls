@@ -11,7 +11,7 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
   const { isLoggedIn, logout } = useAuth();
   const [hoveredLink, setHoveredLink] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-
+  // user goes to loggin page
   const handleSignInClick = () => {
     if (onSignInClick) {
       onSignInClick();
@@ -31,7 +31,7 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
       hoveredLink === path ? 'hovered' : ''
     }`;
   };
-
+  // search function - film list
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -60,7 +60,8 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
           </div>
           
           {/* Conditionally render the nav-links only if the user is logged in */}
-          {isLoggedIn && (
+          {isLoggedIn && ( 
+            // user logged or not
             <div className="nav-links">
               <a
                 href="#"
@@ -106,9 +107,9 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
             </div>
           )}
         </div>
-
-        {/* Conditionally render the authentication buttons */}
-        {isLoggedIn ? (
+        
+        {/* Conditionally render the authentication buttons */} 
+        {isLoggedIn ? ( // show the lodout if logged only
           <div className="auth-buttons">
             <div className="user-actions">
               <button
@@ -125,7 +126,7 @@ const Navbar = ({ onSignInClick, isLoginPage = false }) => {
               </div>
             </div>
           </div>
-        ) : (
+        ) : (  // if user is not log in
           <button
             className={`signin-btn ${isLoginPage ? 'active' : ''}`}
             onClick={handleSignInClick}

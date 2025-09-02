@@ -57,6 +57,7 @@ const getUserByID = async (req, res) => {
   }
 };
 
+// crete  login function
 const createUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -66,7 +67,7 @@ const createUser = async (req, res) => {
         message: 'Name, email, and password are required'
       });
     }
-
+    // data goes to query
     const [result] = await db.query(
       'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
       [name, email, password]

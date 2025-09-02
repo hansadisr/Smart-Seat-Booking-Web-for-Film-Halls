@@ -17,7 +17,7 @@ const BookingList = () => {
         return;
       }
       try {
-        const response = await axios.get(`http://localhost:8080/api/v1/bookings/user/${userId}`);
+        const response = await axios.get(`http://localhost:8080/api/v1/bookings/user/${userId}`); //fetch all bookings for that user from backend
         if (response.data.success && Array.isArray(response.data.bookings)) {
           setBookings(response.data.bookings);
           setError(null);

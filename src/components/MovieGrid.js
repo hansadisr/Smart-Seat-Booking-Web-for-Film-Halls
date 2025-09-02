@@ -28,7 +28,7 @@ const MovieGrid = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => prev + 1);
-    }, 2000);
+    }, 2000); // time in 2 seconds move
 
     return () => clearInterval(interval);
   }, []);

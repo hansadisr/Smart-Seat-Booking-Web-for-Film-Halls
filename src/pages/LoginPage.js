@@ -16,7 +16,7 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
-  // login
+  // check login data
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
@@ -46,15 +46,16 @@ const LoginPage = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
+   // call the home page in the loggin page in blur , call movie and about also
   return (
     <div className="loginpage">
       <Navbar isLoginPage={true} />
       <div className='movie-grid blurred'>
-        <MovieGrid />
+        <MovieGrid /> 
         <AboutSection />
-      </div>
-      <div className="main-content">
+      </div> 
+      {/* login form  */}
+      <div className="main-content">  
         <div className="login-modal">
           <form className="login-form" onSubmit={handleLogin}>
             <h2>Log In</h2>

@@ -23,23 +23,23 @@ const odcSeatsLayout = [
 ];
 
 const Booking = () => {
-    const { movieId } = useParams();
+    const { movieId } = useParams(); // comes from url
     const [movie, setMovie] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [availableTimes, setAvailableTimes] = useState([]);
-    const [selectedTime, setSelectedTime] = useState(null);
-    const [selectedShowId, setSelectedShowId] = useState(null);
-    const [bookedSeats, setBookedSeats] = useState([]);
-    const [selectedSeats, setSelectedSeats] = useState([]);
+    const [selectedDate, setSelectedDate] = useState(new Date()); // default today
+    const [availableTimes, setAvailableTimes] = useState([]); //showtimes for the chosen date & movie
+    const [selectedTime, setSelectedTime] = useState(null); //which show time the user clicked
+    const [selectedShowId, setSelectedShowId] = useState(null); 
+    const [bookedSeats, setBookedSeats] = useState([]); // seats alraedy taken
+    const [selectedSeats, setSelectedSeats] = useState([]); // user select seats
     const [packages, setPackages] = useState([
         { name: 'ODC Full', price: 'LKR 1500.00', count: 0 },
         { name: 'ODC Half', price: 'LKR 750.00', count: 0 },
         { name: 'Box', price: 'LKR 3200.00', count: 0 },
     ]);
     const [isLoading, setIsLoading] = useState(false);
-    const [showPurchaseSummary, setShowPurchaseSummary] = useState(false);
+    const [showPurchaseSummary, setShowPurchaseSummary] = useState(false); // call the purchase
 
-    const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+    const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080'; // if set from env var, else fall back to localhost
     
     //get movie details and store them in movie.When the component loads it calls backend
     useEffect(() => {
@@ -145,7 +145,7 @@ const Booking = () => {
             );
         });
     };
-
+    // button increases ODC ticket count but never beyond ODC seats
     const handleProceedClick = () => {
         const totalTickets = packages.reduce((sum, pkg) => sum + pkg.count, 0);
         if (!selectedTime) return alert('Please select a show time.');
@@ -153,7 +153,7 @@ const Booking = () => {
         if (totalTickets !== selectedSeats.length) return alert('The number of tickets must match the number of selected seats.');
         setShowPurchaseSummary(true);
     };
-
+    
     const renderSeats = (layout, type) => (
         layout.map(({ row, leftSeats, rightSeats }) => (
             <div key={row} className="seat-row">
@@ -178,7 +178,7 @@ const Booking = () => {
     );
 
     if (!movie) return <div>Loading movie details...</div>;
-
+    // display of the movie's release date
     const formattedDate = new Date(movie.release_date).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',

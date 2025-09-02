@@ -11,7 +11,7 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData, onB
     expiryYear: '',
     cardholderName: '',
     securityCode: ''
-  });
+  }); // stores all credit card form, redirect after payement and pulles from local storage
   const [isPaying, setIsPaying] = useState(false);
   const navigate = useNavigate();
   const userId = localStorage.getItem('userId');
@@ -26,9 +26,10 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData, onB
         setCardInfo(prev => ({ ...prev, [name]: formattedValue }));
     } else {
         setCardInfo(prev => ({ ...prev, [name]: value }));
-    }
+    } // specila handelling like 1234 5678 9012 3456
   };
-
+  
+  // build a payload  and send it to backend API
   const handlePayment = async (e) => {
     e.preventDefault();
     setIsPaying(true);
@@ -44,7 +45,7 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData, onB
       };
 
       const response = await axios.post('http://localhost:8080/api/v1/bookings/create', apiPayload);
-
+      // show success popup
       if (response.data.success) {
         Swal.fire({
           icon: 'success',
@@ -54,13 +55,13 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData, onB
         }).then(() => {
           if (onBookingSuccess) onBookingSuccess();
           onClose(); // Close this payment modal
-          navigate('/bookingList');
+          navigate('/bookingList'); // redirect to
         });
       }
     } catch (error) {
       Swal.fire({
         icon: 'error',
-        title: 'Booking Failed',
+        title: 'Booking Failed', // show error popup
         text: error.response?.data?.message || 'An unexpected error occurred.',
       });
     } finally {
@@ -68,7 +69,7 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData, onB
     }
   };
 
-  return (
+  return ( // payement form
     <div className="payment-modal-overlay" onClick={onClose}>
       <div className="payment-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="payment-header">

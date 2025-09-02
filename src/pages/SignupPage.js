@@ -19,7 +19,8 @@ const SignupPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
-
+  
+  // handle signup person
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
@@ -27,7 +28,7 @@ const SignupPage = () => {
       setError('Passwords do not match');
       return;
     }
-    try {
+    try { 
       const response = await axios.post('http://localhost:8080/api/v1/users/create', {
         name,
         email,

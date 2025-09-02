@@ -5,7 +5,7 @@ import PaymentModal from './PaymentModal';
 import '../styles/PurchaseSummary.css';
 
 const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth(); //checks if user is logged in
   const userId = localStorage.getItem('userId');
   const [formData, setFormData] = useState({
     name: '',
@@ -13,8 +13,8 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
     email: '',
     agreeToTerms: false
   });
-  const [showPayment, setShowPayment] = useState(false);
-
+  const [showPayment, setShowPayment] = useState(false); //stores user details and show or hide the payement
+  // if user is logged in, fetch user details from backend
   useEffect(() => {
     if (isOpen && isLoggedIn && userId) {
       const fetchUser = async () => {
@@ -37,8 +37,8 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
     }
   }, [isOpen, isLoggedIn, userId]); // Rerun if the modal is opened again
 
-  if (!isOpen) return null;
-
+  if (!isOpen) return null; // when moedel is close, don't show anything
+  // updates from values when user types or checks the box
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -50,12 +50,15 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
   const handleProceed = (e) => {
     e.preventDefault();
     if (!formData.agreeToTerms) {
-      alert('Please agree to the terms & conditions');
+      alert('Please agree to the terms & conditions'); //if checkbox is not ticked, then show alert
       return;
     }
     setShowPayment(true);
   };
-
+  
+  // calculation part, = price* num.of tickets
+  //+ fee(112.00)
+  //totalamount= subtotal+ fee
   const calculateSubtotal = () => {
     return bookingData.packages.reduce((total, pkg) => {
       const price = parseFloat(pkg.price.replace('LKR ', '').replace(',', ''));
@@ -66,7 +69,7 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
   const internetHandlingFee = 112.00;
   const subtotal = calculateSubtotal();
   const totalAmount = subtotal + internetHandlingFee;
-
+ // show booking detail
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -120,7 +123,7 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
               <span className="fee-amount">LKR {internetHandlingFee.toFixed(2)}</span>
             </div>
           </div>
-
+          {/* open payemnt model if showpayemnt = true */}
           <div className="payment-summary">
             <div className="payment-row">
               <span className="payment-label">Paid Amount</span>
