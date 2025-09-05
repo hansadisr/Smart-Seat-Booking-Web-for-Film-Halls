@@ -42,7 +42,7 @@ const LoginPage = () => {
   const handleSignUp = () => {
     navigate('/signup');
   };
-
+  // switch between showing and hiding password input
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };

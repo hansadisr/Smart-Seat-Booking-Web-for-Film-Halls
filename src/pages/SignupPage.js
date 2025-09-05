@@ -38,7 +38,7 @@ const SignupPage = () => {
       });
       if (response.data.success) {
         console.log('Signup successful:', response.data);
-        login(response.data.userId);
+        login(response.data.userId); // store user id in auth context
         navigate('/');
       }
     } catch (err) {
@@ -49,9 +49,9 @@ const SignupPage = () => {
   };
 
   const handleLogin = () => {
-    navigate('/login');
+    navigate('/login'); // user already has an account, sends them to login page
   };
-
+  // toggle password and confirm password 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };

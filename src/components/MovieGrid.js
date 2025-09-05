@@ -20,10 +20,10 @@ const MovieGrid = () => {
     { id: 14, title: "Cover 11", image: images.cover11 },
     { id: 15, title: "Cover 12", image: images.cover12 },
   ];
-  
+   // duplicates the list , so can loop smoothly without stopping ath the last
   const movieList = [...movies, ...movies];
   const [currentIndex, setCurrentIndex] = useState(0);
-  const trackRef = useRef(null);
+  const trackRef = useRef(null); // give direct access to the carousel, can changes it css thransform
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -32,7 +32,7 @@ const MovieGrid = () => {
 
     return () => clearInterval(interval);
   }, []);
-
+ // reset back to index o , for infinte loop
 useEffect(() => {
     if (currentIndex >= movies.length * 2) {
       setTimeout(() => {
@@ -40,7 +40,7 @@ useEffect(() => {
         trackRef.current.style.transition = "none";
         trackRef.current.style.transform = `translateX(0px)`;
       }, 500);
-    } else {
+    } else { // movie the multiplexing the index with the card width
       trackRef.current.style.transition = "transform 0.5s ease";
       trackRef.current.style.transform = `translateX(-${currentIndex * 285}px)`;
     }
@@ -51,7 +51,7 @@ useEffect(() => {
       <div className="movie-container2">
         <div className="carousel-wrapper1">
           <div className="carousel-track1" ref={trackRef}>
-            {movieList.map((movie, index) => (
+            {movieList.map((movie, index) => ( // maps over movielist
               <div key={`${movie.id}-${index}`} className="movie-card">
                 <img src={movie.image} alt={movie.title} />
                 {/* <div className="movie-overlay">

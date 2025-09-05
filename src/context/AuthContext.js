@@ -14,10 +14,11 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('userId');
     setIsLoggedIn(false);
   };
-
+  // Authprovider wraps your whole apps in index.js
+  //makes all components wrapped inside
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
-      {children}
+    <AuthContext.Provider value={{ isLoggedIn, login, logout }}> 
+      {children}  
     </AuthContext.Provider>
   );
 };
