@@ -1,4 +1,6 @@
 const db = require("../config/db");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 const getUsers = async (req, res) => {
   try {
@@ -67,10 +69,24 @@ const createUser = async (req, res) => {
         message: 'Name, email, and password are required'
       });
     }
-    // data goes to query
+
+    // Check if user already exists
+    const [existingUser] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+    if (existingUser && existingUser.length > 0) {
+      return res.status(400).send({
+        success: false,
+        message: 'Email already registered'
+      });
+    }
+
+    // Hash password with salt rounds = 10
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Insert hashed password into database
     const [result] = await db.query(
       'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
-      [name, email, password]
+      [name, email, hashedPassword]
     );
 
     if (result.affectedRows === 0) {
@@ -80,10 +96,19 @@ const createUser = async (req, res) => {
       });
     }
 
+    const token = jwt.sign(
+      { userId: result.insertId, email },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRE }
+    );
+
     res.status(201).send({
       success: true,
       message: 'User created successfully',
-      userId: result.insertId
+      token,
+      userId: result.insertId,
+      userName: name,
+      userEmail: email
     });
   } catch (error) {
     console.log('Error in createUser:', error);
@@ -105,9 +130,10 @@ const loginUser = async (req, res) => {
       });
     }
 
+    // Find user by email
     const [rows] = await db.query(
-      'SELECT * FROM users WHERE email = ? AND password = ?',
-      [email, password]
+      'SELECT * FROM users WHERE email = ?',
+      [email]
     );
 
     if (!rows || rows.length === 0) {
@@ -117,10 +143,29 @@ const loginUser = async (req, res) => {
       });
     }
 
+    // Compare password with hashed password
+    const isPasswordValid = await bcrypt.compare(password, rows[0].password);
+    if (!isPasswordValid) {
+      return res.status(401).send({
+        success: false,
+        message: 'Invalid email or password'
+      });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: rows[0].user_id, email: rows[0].email },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRE }
+    );
+
     res.status(200).send({
       success: true,
       message: 'Login successful',
-      userId: rows[0].user_id
+      token: token,
+      userId: rows[0].user_id,
+      userName: rows[0].name,
+      userEmail: rows[0].email
     });
   } catch (error) {
     console.log('Error in loginUser:', error);

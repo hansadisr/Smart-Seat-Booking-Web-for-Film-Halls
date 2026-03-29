@@ -29,7 +29,12 @@ const LoginPage = () => {
       });
       if (response.data.success) {
         console.log('Login successful:', response.data);
-        login(response.data.userId); // Update auth state
+        login(
+          response.data.token,
+          response.data.userId,
+          response.data.userName,
+          response.data.userEmail
+        );
         navigate('/');
       }
     } catch (err) {

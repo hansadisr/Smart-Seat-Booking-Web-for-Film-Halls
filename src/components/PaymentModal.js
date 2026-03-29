@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useAuth } from '../context/AuthContext';
 import '../styles/PaymentModal.css';
 
 const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData, onBookingSuccess }) => {
@@ -14,7 +15,8 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData, onB
   }); // stores all credit card form, redirect after payement and pulles from local storage
   const [isPaying, setIsPaying] = useState(false);
   const navigate = useNavigate();
-  const userId = localStorage.getItem('userId');
+  const { user } = useAuth();
+  const userId = user?.userId || localStorage.getItem('userId');
 
   if (!isOpen) return null;
 
@@ -35,8 +37,12 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, bookingData, userData, onB
     setIsPaying(true);
 
     try {
+      if (!userId) {
+        throw new Error('Please login before making a booking.');
+      }
+
       const apiPayload = {
-        user_id: parseInt(userId),
+        user_id: Number(userId),
         show_id: bookingData.showId,
         seats: bookingData.selectedSeats,
         packages: bookingData.packages,

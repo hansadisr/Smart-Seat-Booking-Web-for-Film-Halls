@@ -28,17 +28,17 @@ const Movies = () => {
     };
     fetchMovies();
   }, []);
-
+   // Search query        
   const filterMovies = (movies) => {
     if (!searchQuery) return movies;
     return movies.filter(movie =>
       movie.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    ); // only shows movies that match the search
   };
 
   const renderMovies = (movies, showAll) => {
     const filteredMovies = filterMovies(movies);
-    const moviesToShow = showAll ? filteredMovies : filteredMovies.slice(0, 6);
+    const moviesToShow = showAll ? filteredMovies : filteredMovies.slice(0, 6); // only the first 6 movies are shown
     return moviesToShow.length > 0 ? (
       moviesToShow.map(movie => (
         <Link to={`/movie/${movie.movie_id}`} key={movie.movie_id} className="movie-card1">

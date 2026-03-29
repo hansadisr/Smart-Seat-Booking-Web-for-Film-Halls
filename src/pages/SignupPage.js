@@ -38,7 +38,12 @@ const SignupPage = () => {
       });
       if (response.data.success) {
         console.log('Signup successful:', response.data);
-        login(response.data.userId); // store user id in auth context
+        login(
+          response.data.token,
+          response.data.userId,
+          response.data.userName,
+          response.data.userEmail
+        );
         navigate('/');
       }
     } catch (err) {

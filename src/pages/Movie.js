@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import '../styles/Movie.css';
 
 const Movie = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // get the id
   const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [casts, setCasts] = useState([]);
@@ -30,7 +30,7 @@ const Movie = () => {
     navigate(`/booking/${id}`);
   };
 
-  if (!movie) return <div>Loading...</div>;
+  if (!movie) return <div>Loading...</div>; // shows a simple loading message before API responds
 
   const formattedDate = new Date(movie.release_date).toLocaleDateString('en-US', {
     year: 'numeric',

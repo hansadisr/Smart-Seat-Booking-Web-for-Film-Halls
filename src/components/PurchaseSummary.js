@@ -5,8 +5,8 @@ import PaymentModal from './PaymentModal';
 import '../styles/PurchaseSummary.css';
 
 const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
-  const { isLoggedIn } = useAuth(); //checks if user is logged in
-  const userId = localStorage.getItem('userId');
+  const { isLoggedIn, user, getAuthHeader } = useAuth(); //checks if user is logged in
+  const userId = user?.userId || localStorage.getItem('userId');
   const [formData, setFormData] = useState({
     name: '',
     mobileNumber: '',
@@ -19,7 +19,9 @@ const PurchaseSummary = ({ isOpen, onClose, bookingData }) => {
     if (isOpen && isLoggedIn && userId) {
       const fetchUser = async () => {
         try {
-          const response = await axios.get(`http://localhost:8080/api/v1/users/get/${userId}`);
+          const response = await axios.get(`http://localhost:8080/api/v1/users/get/${userId}`, {
+            headers: getAuthHeader(),
+          });
           if (response.data.success) {
             const user = response.data.userDetails;
             setFormData(prev => ({
